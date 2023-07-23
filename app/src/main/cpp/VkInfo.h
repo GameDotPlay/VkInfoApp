@@ -1,8 +1,12 @@
 #pragma once
 
+#include "InstanceInfo.hpp"
 #include <vulkan/vulkan_core.h>
+#include <string>
 
 struct VkInfo
 {
-    VkInstance instance = VK_NULL_HANDLE;
+    InstanceInfo instanceInfo;
+    VkPhysicalDevice selectedPhysicalDevice = VK_NULL_HANDLE;
+    VkPhysicalDeviceProperties physicalDeviceProperties = {};
 };

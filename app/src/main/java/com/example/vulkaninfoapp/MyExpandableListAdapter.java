@@ -2,6 +2,7 @@ package com.example.vulkaninfoapp;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,10 @@ import java.util.Map;
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private Map<String, List<String>> mobileCollection;
+    private Map<String, List<Pair<String, String>>> mobileCollection;
     private List<String> groupList;
 
-    public MyExpandableListAdapter(Context context, List<String> groupList, Map<String, List<String>> mobileCollection) {
+    public MyExpandableListAdapter(Context context, List<String> groupList, Map<String, List<Pair<String, String>>> mobileCollection) {
         this.context = context;
         this.mobileCollection = mobileCollection;
         this.groupList = groupList;
@@ -73,14 +74,22 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        String model = getChild(i, i1).toString();
-        if (view == null)
-        {
+
+        Pair<String, String> child = (Pair<String, String>) getChild(i, i1);
+        String propertyName = child.first;
+        String propertyValue = child.second;
+
+        if (view == null) {
             LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.child_item, null);
         }
-        TextView item = view.findViewById(R.id.propertyName);
-        item.setText(model);
+
+        TextView left = view.findViewById(R.id.propertyName);
+        left.setText(propertyName);
+
+        TextView right = view.findViewById(R.id.propertyValue);
+        right.setText(propertyValue);
+
         return view;
     }
 

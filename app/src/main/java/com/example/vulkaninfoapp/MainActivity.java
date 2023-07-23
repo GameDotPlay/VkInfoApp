@@ -3,6 +3,7 @@ package com.example.vulkaninfoapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -23,12 +24,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ActivityMainBinding binding;
-
-    List<String> groupList;
-    List<String> childList;
-    Map<String, List<String>> mobileCollection;
-    ExpandableListView expandableListView;
-    ExpandableListAdapter expandableListAdapter;
+    private List<String> groupList;
+    private List<Pair<String, String>> childList;
+    private Map<String, List<Pair<String, String>>> mobileCollection;
+    private ExpandableListView expandableListView;
+    private ExpandableListAdapter expandableListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String appName = initInstance("TestName", "TestEngine");
         createGroupList();
         createCollection();
         expandableListView = findViewById(R.id.vulkanInfo);
@@ -61,50 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        //TextView tv = binding.sampleText;
-        //tv.setText(stringFromJNI());
-    }
-
-    private void createCollection() {
-        String[] samsungModels = {"Samsung Galaxy M21", "Samsung Galaxy F41", "Samsung Galaxy M51", "Samsung Galaxy A50s"};
-        String[] googleModels = {"Pixel 4 XL", "Pixel 3a", "Pixel 3 XL", "Pixel 3a XL", "Pixel 2", "Pixel 3"};
-        String[] redmiModels = {"Redmi 9i", "Redmi Note 9 Pro Max", "Redmi Note 9 Pro"};
-        String[] vivoModels = {"Vivo V20", "Vivo S1 Pro", "Vivo Y91i", "Vivo Y12"};
-        String[] nokiaModels = {"Nokia 5.3", "Nokia 2.3", "Nokia 3.1 Plus"};
-
-        mobileCollection = new HashMap<String, List<String>>();
-
-        for (String group : groupList) {
-            if (group.equals("Instance Info")) {
-                loadChild(samsungModels);
-            } else if (group.equals("Physical Device Properties")) {
-                loadChild(googleModels);
-            } else if (group.equals("Physical Device Limits")) {
-                loadChild(googleModels);
-            } else if (group.equals("Physical Device Features")) {
-                loadChild(redmiModels);
-            } else if (group.equals("Physical Device Memory Properties")) {
-                loadChild(vivoModels);
-            }else if (group.equals("Physical Device Memory Heap Properties")) {
-                    loadChild(vivoModels);
-            } else if (group.equals("Physical Device Queue Family Properties")) {
-                loadChild(nokiaModels);
-            }
-
-            mobileCollection.put(group, childList);
-        }
-    }
-
-    private void loadChild(String[] properties) {
-        childList = new ArrayList<>();
-        for (String property : properties) {
-            childList.add(property);
-        }
-    }
-
-    private void populateInstanceInfo() {
-        childList = new ArrayList<>();
     }
 
     private void createGroupList() {
@@ -119,9 +74,67 @@ public class MainActivity extends AppCompatActivity {
         groupList.add("Physical Device Queue Family Properties");
     }
 
+    private void createCollection() {
+
+        mobileCollection = new HashMap<String, List<Pair<String, String>>>();
+        VkInfo vkInfo = getVkInfo("Vulkan Info App", "No engine");
+
+        for (String group : groupList) {
+            switch(group) {
+                case "Instance Info":
+                    populateInstanceInfo(vkInfo.instanceInfo);
+                    break;
+
+                case "Physical Device Properties":
+                    populatePhysicalDeviceProperties(vkInfo.physicalDeviceProperties);
+                    break;
+
+                case "Physical Device Limits":
+                    break;
+
+                case "Physical Device Features":
+                    break;
+
+                case "Physical Device Memory Properties":
+                    break;
+
+                case "Physical Device Heap Properties":
+                    break;
+
+                case "Physical Device Queue Family Properties":
+                    break;
+
+                default:
+            }
+
+            mobileCollection.put(group, childList);
+        }
+    }
+
+    private void populatePhysicalDeviceProperties(PhysicalDeviceProperties physicalDeviceProperties) {
+        childList = new ArrayList<Pair<String, String>>();
+        if (physicalDeviceProperties != null) {
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.apiVersion.ordinal()], String.valueOf(physicalDeviceProperties.apiVersion)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.driverVersion.ordinal()], String.valueOf(physicalDeviceProperties.driverVersion)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.vendorId.ordinal()], String.valueOf(physicalDeviceProperties.vendorId)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceId.ordinal()], String.valueOf(physicalDeviceProperties.deviceId)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceType.ordinal()], PhysicalDeviceProperties.PhysicalDeviceTypeNames[physicalDeviceProperties.physicalDeviceType.ordinal()]));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceName.ordinal()], String.valueOf(physicalDeviceProperties.deviceName)));
+        }
+    }
+
+    private void populateInstanceInfo(InstanceInfo instanceInfo) {
+        childList = new ArrayList<Pair<String, String>>();
+        if (instanceInfo != null) {
+            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.appName.ordinal()], instanceInfo.appName));
+            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.engineName.ordinal()], instanceInfo.engineName));
+            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.numDevices.ordinal()], String.valueOf(instanceInfo.numDevices)));
+        }
+    }
+
     /**
      * A native method that is implemented by the 'vulkaninfoapp' native library,
      * which is packaged with this application.
      */
-    public native static String initInstance(String appName, String engineName);
+    private native static VkInfo getVkInfo(String appName, String engineName);
 }

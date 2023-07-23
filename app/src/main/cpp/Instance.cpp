@@ -29,7 +29,7 @@ Instance::Instance(const std::string& appName, const std::string& engineName, co
     }
 }
 
-VkInstance Instance::getInstance()
+VkInstance Instance::getInstance() const
 {
     return this->handle;
 }
@@ -52,7 +52,7 @@ Instance::~Instance()
     }
 }
 
-uint32_t Instance::getNumberPhysicalDevices()
+uint32_t Instance::getNumberPhysicalDevices() const
 {
     if (this->handle == VK_NULL_HANDLE)
     {
@@ -68,7 +68,7 @@ uint32_t Instance::getNumberPhysicalDevices()
     return numDevices;
 }
 
-std::vector<VkPhysicalDevice> Instance::getPhysicalDevices()
+std::vector<VkPhysicalDevice> Instance::getPhysicalDevices() const
 {
     if (this->handle == VK_NULL_HANDLE)
     {
@@ -88,4 +88,9 @@ std::vector<VkPhysicalDevice> Instance::getPhysicalDevices()
     }
 
     return devices;
+}
+
+Instance::Instance()
+{
+
 }

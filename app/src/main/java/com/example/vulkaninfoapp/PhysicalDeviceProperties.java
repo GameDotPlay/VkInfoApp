@@ -5,7 +5,7 @@ public class PhysicalDeviceProperties {
     public long driverVersion;
     public long vendorId;
     public long deviceId;
-    public PhysicalDeviceType physicalDeviceType;
+    public int physicalDeviceType;
     public String deviceName;
     public PhysicalDeviceLimits physicalDeviceLimits;
     public PhysicalDeviceSparseProperties physicalDeviceSparseProperties;

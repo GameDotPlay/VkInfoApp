@@ -80,10 +80,8 @@ VkPhysicalDeviceProperties getPhysicalDeviceProperties(VkPhysicalDevice physical
 void populatePhysicalDevicePropertiesObject(JNIEnv *env, VkPhysicalDeviceProperties properties, jobject obj)
 {
     jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceProperties");
-    jclass deviceTypeClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceType");
-    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "physicalDeviceType", "Lcom/example/vulkaninfoapp/PhysicalDeviceType;");
 
-    fidNumber = env->GetFieldID(propertiesClazz, "apiVersion", "J");
+    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "apiVersion", "J");
     env->SetLongField(obj, fidNumber, (jlong)properties.apiVersion);
 
     fidNumber = env->GetFieldID(propertiesClazz, "driverVersion", "J");
@@ -95,14 +93,32 @@ void populatePhysicalDevicePropertiesObject(JNIEnv *env, VkPhysicalDevicePropert
     fidNumber = env->GetFieldID(propertiesClazz, "deviceId", "J");
     env->SetLongField(obj, fidNumber, (jlong)properties.deviceID);
 
-    const char* deviceType = PhysicalDeviceType::PhysicalDeviceTypeNames[properties.deviceType].c_str();
-    fidNumber = env->GetStaticFieldID(deviceTypeClazz , deviceType, "Lcom/example/vulkaninfoapp/PhysicalDeviceType;");
-    jobject deviceTypeObj = env->GetStaticObjectField(deviceTypeClazz, fidNumber);
-    env->SetStaticObjectField(deviceTypeClazz, fidNumber, deviceTypeObj);
+    fidNumber = env->GetFieldID(propertiesClazz, "physicalDeviceType", "I");
+    env->SetIntField(obj, fidNumber, (jint)properties.deviceType);
 
     fidNumber = env->GetFieldID(propertiesClazz, "deviceName", "Ljava/lang/String;");
     jstring deviceName = env->NewStringUTF(properties.deviceName);
     env->SetObjectField(obj, fidNumber, deviceName);
+}
+
+void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, VkPhysicalDeviceSparseProperties properties, jobject obj)
+{
+    jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceSparseProperties");
+
+    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "residencyStandard2DBlockShape", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyStandard2DBlockShape);
+
+    fidNumber = env->GetFieldID(propertiesClazz, "residencyStandard2DMultisampleBlockShape", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyStandard2DMultisampleBlockShape);
+
+    fidNumber = env->GetFieldID(propertiesClazz, "residencyStandard3DBlockShape", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyStandard3DBlockShape);
+
+    fidNumber = env->GetFieldID(propertiesClazz, "residencyAlignedMipSize", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyAlignedMipSize);
+
+    fidNumber = env->GetFieldID(propertiesClazz, "residencyNonResidentScrict", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyNonResidentStrict);
 }
 
 extern "C"
@@ -113,6 +129,7 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     const std::string VK_INFO_CLASS_NAME = "com/example/vulkaninfoapp/VkInfo";
     const std::string INSTANCE_INFO_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/InstanceInfo;";
     const std::string PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
+    const std::string PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
     VkInfo vkInfo = {};
     Instance instance = initInstance(env, app_name, engine_name);
     if (instance.getInstance() == VK_NULL_HANDLE)
@@ -131,9 +148,15 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     populateInstanceInfoObject(env, vkInfo.instanceInfo, instanceInfoObject);
     env->SetObjectField(vkInfoObject, fidNumber, instanceInfoObject);
 
-    fidNumber = env->GetFieldID(env->FindClass(VK_INFO_CLASS_NAME.c_str()), "physicalDeviceProperties", PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE.c_str());
     jobject physicalDevicePropertiesObject = getObject(env, "com/example/vulkaninfoapp/PhysicalDeviceProperties");
+
+    fidNumber = env->GetFieldID(env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceProperties"), "physicalDeviceSparseProperties", PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_SIGNATURE.c_str());
+    jobject physicalDeviceSparsePropertiesObject = getObject(env, "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties");
+    populatePhysicalDeviceSparsePropertiesObject(env, vkInfo.physicalDeviceProperties.sparseProperties, physicalDeviceSparsePropertiesObject);
+    env->SetObjectField(physicalDevicePropertiesObject, fidNumber, physicalDeviceSparsePropertiesObject);
+
     populatePhysicalDevicePropertiesObject(env, vkInfo.physicalDeviceProperties, physicalDevicePropertiesObject);
+    fidNumber = env->GetFieldID(env->FindClass(VK_INFO_CLASS_NAME.c_str()), "physicalDeviceProperties", PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE.c_str());
     env->SetObjectField(vkInfoObject, fidNumber, physicalDevicePropertiesObject);
 
     return vkInfoObject;

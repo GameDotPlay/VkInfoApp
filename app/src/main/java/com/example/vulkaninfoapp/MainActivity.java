@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 case "Physical Device Limits":
                     break;
 
+                case "Physical Device Sparse Properties":
+                    populatePhysicalDeviceSparseProperties(vkInfo.physicalDeviceProperties.physicalDeviceSparseProperties);
+                    break;
+
                 case "Physical Device Features":
                     break;
 
@@ -118,8 +122,19 @@ public class MainActivity extends AppCompatActivity {
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.driverVersion.ordinal()], String.valueOf(physicalDeviceProperties.driverVersion)));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.vendorId.ordinal()], String.valueOf(physicalDeviceProperties.vendorId)));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceId.ordinal()], String.valueOf(physicalDeviceProperties.deviceId)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceType.ordinal()], PhysicalDeviceProperties.PhysicalDeviceTypeNames[physicalDeviceProperties.physicalDeviceType.ordinal()]));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceType.ordinal()], PhysicalDeviceProperties.PhysicalDeviceTypeNames[physicalDeviceProperties.physicalDeviceType]));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceName.ordinal()], String.valueOf(physicalDeviceProperties.deviceName)));
+        }
+    }
+
+    private void populatePhysicalDeviceSparseProperties(PhysicalDeviceSparseProperties sparseProperties) {
+        childList = new ArrayList<Pair<String, String>>();
+        if (sparseProperties != null) {
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard2DBlockShape)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DMultisampleBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard2DMultisampleBlockShape)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard3DBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard3DBlockShape)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyAlignedMipSize.ordinal()], String.valueOf(sparseProperties.residencyAlignedMipSize)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyNonResidentScrict.ordinal()], String.valueOf(sparseProperties.residencyNonResidentScrict)));
         }
     }
 

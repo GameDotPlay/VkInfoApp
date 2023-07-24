@@ -101,6 +101,31 @@ void populatePhysicalDevicePropertiesObject(JNIEnv *env, VkPhysicalDevicePropert
     env->SetObjectField(obj, fidNumber, deviceName);
 }
 
+void populatePhysicalDeviceLimitsObject(JNIEnv* env, VkPhysicalDeviceLimits limits, jobject obj)
+{
+    jclass limitsClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceLimits");
+
+    jfieldID fidNumber = env->GetFieldID(limitsClazz, "maxImageDimension1D", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxImageDimension1D);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxImageDimension2D", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxImageDimension2D);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxImageDimension3D", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxImageDimension3D);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxImageDimensionCube", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxImageDimensionCube);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxImageArrayLayers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxImageArrayLayers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTexelBufferElements", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTexelBufferElements);
+
+    // TODO: Continue here populating limits. Forever...
+}
+
 void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, VkPhysicalDeviceSparseProperties properties, jobject obj)
 {
     jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceSparseProperties");
@@ -129,10 +154,12 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     const std::string VK_INFO_CLASS_NAME = "com/example/vulkaninfoapp/VkInfo";
     const std::string INSTANCE_INFO_CLASS_NAME = "com/example/vulkaninfoapp/InstanceInfo";
     const std::string PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME = "com/example/vulkaninfoapp/PhysicalDeviceProperties";
+    const std::string PHYSICAL_DEVICE_LIMITS_CLASS_NAME = "com/example/vulkaninfoapp/PhysicalDeviceLimits";
     const std::string PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_NAME = "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties";
 
     const std::string INSTANCE_INFO_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/InstanceInfo;";
     const std::string PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
+    const std::string PHYSICAL_DEVICE_LIMITS_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceLimits;";
     const std::string PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
     VkInfo vkInfo = {};
     Instance instance = initInstance(env, app_name, engine_name);
@@ -141,24 +168,36 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
         return nullptr;
     }
 
+    // Get info from actual Vulkan instance on the device.
     vkInfo.instanceInfo = getInstanceInfo(instance);
     vkInfo.selectedPhysicalDevice = vkInfo.instanceInfo.devices[0];
     vkInfo.physicalDeviceProperties = getPhysicalDeviceProperties(vkInfo.selectedPhysicalDevice);
 
+    // Get an instance of the VkInfo Java object.
     jobject vkInfoObject = getObject(env, VK_INFO_CLASS_NAME.c_str());
 
+    // Populate the instanceInfo Java object.
     jfieldID fidNumber = env->GetFieldID(env->FindClass(VK_INFO_CLASS_NAME.c_str()), "instanceInfo", INSTANCE_INFO_CLASS_SIGNATURE.c_str());
     jobject instanceInfoObject = getObject(env, INSTANCE_INFO_CLASS_NAME.c_str());
     populateInstanceInfoObject(env, vkInfo.instanceInfo, instanceInfoObject);
     env->SetObjectField(vkInfoObject, fidNumber, instanceInfoObject);
 
+    // Populate the physicalDeviceProperties Java object.
     jobject physicalDevicePropertiesObject = getObject(env, PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME.c_str());
 
+    // Populate physicalDeviceProperties.limits Java object.
+    fidNumber = env->GetFieldID(env->FindClass(PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME.c_str()), "physicalDeviceLimits", PHYSICAL_DEVICE_LIMITS_CLASS_SIGNATURE.c_str());
+    jobject physicalDeviceLimitsObject = getObject(env, PHYSICAL_DEVICE_LIMITS_CLASS_NAME.c_str());
+    populatePhysicalDeviceLimitsObject(env, vkInfo.physicalDeviceProperties.limits, physicalDeviceLimitsObject);
+    env->SetObjectField(physicalDevicePropertiesObject, fidNumber, physicalDeviceLimitsObject);
+
+    // Populate physicalDeviceProperties.sparseProperties Java object.
     fidNumber = env->GetFieldID(env->FindClass(PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME.c_str()), "physicalDeviceSparseProperties", PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_SIGNATURE.c_str());
     jobject physicalDeviceSparsePropertiesObject = getObject(env, PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_NAME.c_str());
     populatePhysicalDeviceSparsePropertiesObject(env, vkInfo.physicalDeviceProperties.sparseProperties, physicalDeviceSparsePropertiesObject);
     env->SetObjectField(physicalDevicePropertiesObject, fidNumber, physicalDeviceSparsePropertiesObject);
 
+    // Set the physicalDeviceProperties field of the Java VkInfo object.
     populatePhysicalDevicePropertiesObject(env, vkInfo.physicalDeviceProperties, physicalDevicePropertiesObject);
     fidNumber = env->GetFieldID(env->FindClass(VK_INFO_CLASS_NAME.c_str()), "physicalDeviceProperties", PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE.c_str());
     env->SetObjectField(vkInfoObject, fidNumber, physicalDevicePropertiesObject);

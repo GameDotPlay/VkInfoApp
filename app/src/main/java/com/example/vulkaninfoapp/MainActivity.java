@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case "Physical Device Limits":
+                    populatePhysicalDeviceLimits(vkInfo.physicalDeviceProperties.physicalDeviceLimits);
                     break;
 
                 case "Physical Device Sparse Properties":
@@ -124,6 +125,19 @@ public class MainActivity extends AppCompatActivity {
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceId.ordinal()], String.valueOf(physicalDeviceProperties.deviceId)));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceType.ordinal()], PhysicalDeviceProperties.PhysicalDeviceTypeNames[physicalDeviceProperties.physicalDeviceType]));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceName.ordinal()], String.valueOf(physicalDeviceProperties.deviceName)));
+        }
+    }
+
+    private void populatePhysicalDeviceLimits(PhysicalDeviceLimits limits) {
+        childList = new ArrayList<Pair<String, String>>();
+        if (limits != null) {
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxImageDimension1D.ordinal()], String.valueOf(limits.maxImageDimension1D)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxImageDimension2D.ordinal()], String.valueOf(limits.maxImageDimension2D)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxImageDimension3D.ordinal()], String.valueOf(limits.maxImageDimension3D)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxImageDimensionCube.ordinal()], String.valueOf(limits.maxImageDimensionCube)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxImageArrayLayers.ordinal()], String.valueOf(limits.maxImageArrayLayers)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxTexelBufferElements.ordinal()], String.valueOf(limits.maxTexelBufferElements)));
+            // TODO: Continue here populating limits. Forever...
         }
     }
 

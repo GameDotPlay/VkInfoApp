@@ -24,11 +24,7 @@ add_library( # Sets the name of the library.
         native-lib.cpp
         Instance.cpp
         PhysicalDevice.cpp
-        LogicalDevice.cpp
-        QueueFamilyIndicies.hpp
         JniBridge.cpp
-        InstanceInfo.hpp
-        PhysicalDeviceType.hpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

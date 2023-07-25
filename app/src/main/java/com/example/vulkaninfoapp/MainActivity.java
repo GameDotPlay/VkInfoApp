@@ -119,12 +119,12 @@ public class MainActivity extends AppCompatActivity {
     private void populatePhysicalDeviceProperties(PhysicalDeviceProperties physicalDeviceProperties) {
         childList = new ArrayList<Pair<String, String>>();
         if (physicalDeviceProperties != null) {
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.apiVersion.ordinal()], String.valueOf(physicalDeviceProperties.apiVersion)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.driverVersion.ordinal()], String.valueOf(physicalDeviceProperties.driverVersion)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.vendorId.ordinal()], String.valueOf(physicalDeviceProperties.vendorId)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceId.ordinal()], String.valueOf(physicalDeviceProperties.deviceId)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.apiVersion.ordinal()], physicalDeviceProperties.apiVersion));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.driverVersion.ordinal()], physicalDeviceProperties.driverVersion));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.vendorId.ordinal()], physicalDeviceProperties.vendorId));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceId.ordinal()], physicalDeviceProperties.deviceId));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceType.ordinal()], PhysicalDeviceProperties.PhysicalDeviceTypeNames[physicalDeviceProperties.physicalDeviceType]));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceName.ordinal()], String.valueOf(physicalDeviceProperties.deviceName)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDevicePropertyNames[PhysicalDevicePropertyIndices.deviceName.ordinal()], physicalDeviceProperties.deviceName));
         }
     }
 
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DMultisampleBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard2DMultisampleBlockShape)));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard3DBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard3DBlockShape)));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyAlignedMipSize.ordinal()], String.valueOf(sparseProperties.residencyAlignedMipSize)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyNonResidentScrict.ordinal()], String.valueOf(sparseProperties.residencyNonResidentScrict)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyNonResidentScrict.ordinal()], String.valueOf(sparseProperties.residencyNonResidentStrict)));
         }
     }
 

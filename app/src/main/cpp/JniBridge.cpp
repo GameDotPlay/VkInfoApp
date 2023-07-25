@@ -1,24 +1,63 @@
 #include "Instance.h"
 #include "PhysicalDevice.h"
-#include "PhysicalDeviceType.hpp"
-#include "LogicalDevice.h"
-#include "InstanceInfo.hpp"
 #include "VkInfo.h"
 #include <jni.h>
 #include <string>
+#include <sstream>
 
-Instance initInstance(JNIEnv *env, jstring app_name, jstring engine_name)
+/**
+ * Parse the apiVersion as a string in the format of Variant.Major.Minor.Patch.
+ * @param apiVersion The apiVersion from <code>VkPhysicalDeviceProperties</code>.
+ * @return the apiVersion as a string in the format of Variant.Major.Minor.Patch.
+ */
+std::string getApiVersionAsString(const uint32_t apiVersion)
+{
+    std::ostringstream ss;
+    ss << VK_API_VERSION_VARIANT(apiVersion) << ".";
+    ss << VK_API_VERSION_MAJOR(apiVersion) << ".";
+    ss << VK_API_VERSION_MINOR(apiVersion) << ".";
+    ss << VK_API_VERSION_PATCH(apiVersion);
+
+    return ss.str();
+}
+
+/**
+ * Parses a value into hexadecimal form and formats it as a string prefixed with 0x.
+ * @param value The value to be converted.
+ * @return the hex value formatted as a string and prefixed with 0x.
+ */
+std::string asHexString(const uint32_t value)
+{
+    std::ostringstream ss;
+    ss << "0x" << std::hex << value;
+    return ss.str();
+}
+
+/**
+ * Initializes a <code>VkInstance</code> on the device.
+ * @param env The JNI environment.
+ * @param app_name The application name to give to the <code>VkInstance</code>.
+ * @param engine_name The engine name to give to the <code>VkInstance</code>.
+ * @return the <code>Instance</code> object.
+ */
+Instance getInstance(JNIEnv *env, const jstring app_name, const jstring engine_name)
 {
     std::string appName(env->GetStringUTFChars(app_name, nullptr));
     std::string engineName(env->GetStringUTFChars(engine_name, nullptr));
 
     std::vector<const char*> extensions = {};
     std::vector<const char*> layers = {};
-    Instance instance = Instance(appName, engineName, extensions, layers);
 
-    return instance;
+    return Instance(appName, engineName, extensions, layers);
 }
 
+/**
+ * Gets a Java object instance based on the parameters provided.
+ * @param env The JNI environment.
+ * @param className The fully qualified Java class name.
+ * @param constructorSig The signature of the class constructor as defined by the JNI.
+ * @return the Java object instance.
+ */
 jobject getObject(JNIEnv *env, const char* className, const char* constructorSig = "()V")
 {
     jclass clazz = env->FindClass(className);
@@ -42,56 +81,53 @@ jobject getObject(JNIEnv *env, const char* className, const char* constructorSig
     return objectInst;
 }
 
-InstanceInfo getInstanceInfo(const Instance& instance)
-{
-    InstanceInfo instanceInfo = {};
-
-    instanceInfo.instance = instance.getInstance();
-    instanceInfo.appName = instance.getAppName();
-    instanceInfo.engineName = instance.getEngineName();
-    instanceInfo.deviceCount = instance.getNumberPhysicalDevices();
-    instanceInfo.devices.resize(instanceInfo.deviceCount);
-    instanceInfo.devices = instance.getPhysicalDevices();
-
-    return instanceInfo;
-}
-
-void populateInstanceInfoObject(JNIEnv *env, const InstanceInfo& instanceInfo, jobject instanceInfoObject)
+/**
+ * Populates the fields of the <code>InstanceInfo</code> Java object.
+ * @param env The JNI environment.
+ * @param instance The <code>VkInstance</code> that contains the Vulkan instance data.
+ * @param instanceInfoObject (OUT param) The <code>InstanceInfo</code> Java object to populate.
+ */
+void populateInstanceInfoObject(JNIEnv *env, const Instance& instance, jobject instanceInfoObject)
 {
     jclass instanceInfoClass = env->FindClass("com/example/vulkaninfoapp/InstanceInfo");
 
     jfieldID fidNumber = env->GetFieldID(instanceInfoClass, "appName", "Ljava/lang/String;");
-    jstring appName = env->NewStringUTF(instanceInfo.appName.c_str());
+    jstring appName = env->NewStringUTF(instance.getAppName().c_str());
     env->SetObjectField(instanceInfoObject, fidNumber, appName);
 
     fidNumber = env->GetFieldID(instanceInfoClass, "engineName", "Ljava/lang/String;");
-    jstring engineNameFromInstance = env->NewStringUTF(instanceInfo.engineName.c_str());
+    jstring engineNameFromInstance = env->NewStringUTF(instance.getEngineName().c_str());
     env->SetObjectField(instanceInfoObject, fidNumber, engineNameFromInstance);
 
     fidNumber = env->GetFieldID(instanceInfoClass, "numDevices", "I");
-    env->SetIntField(instanceInfoObject, fidNumber, (int)instanceInfo.deviceCount);
+    env->SetIntField(instanceInfoObject, fidNumber, (int)instance.getNumberPhysicalDevices());
 }
 
-VkPhysicalDeviceProperties getPhysicalDeviceProperties(VkPhysicalDevice physicalDevice)
-{
-    return PhysicalDevice::getDeviceProperties(physicalDevice);
-}
-
-void populatePhysicalDevicePropertiesObject(JNIEnv *env, VkPhysicalDeviceProperties properties, jobject obj)
+/**
+ * Populates the fields of the <code>PhysicalDeviceProperties</code> Java object.
+ * @param env The JNI environment.
+ * @param properties The <code>VkPhysicalDeviceProperties</code> that contains the Vulkan device properties.
+ * @param obj (OUT param) The <code>PhysicalDeviceProperties</code> Java object to populate.
+ */
+void populatePhysicalDevicePropertiesObject(JNIEnv *env, const VkPhysicalDeviceProperties properties, jobject obj)
 {
     jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceProperties");
 
-    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "apiVersion", "J");
-    env->SetLongField(obj, fidNumber, (jlong)properties.apiVersion);
+    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "apiVersion", "Ljava/lang/String;");
+    jstring apiVersion = env->NewStringUTF(getApiVersionAsString(properties.apiVersion).c_str());
+    env->SetObjectField(obj, fidNumber, apiVersion);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "driverVersion", "J");
-    env->SetLongField(obj, fidNumber, (jlong)properties.driverVersion);
+    fidNumber = env->GetFieldID(propertiesClazz, "driverVersion", "Ljava/lang/String;");
+    jstring driverVersion = env->NewStringUTF(asHexString(properties.driverVersion).c_str());
+    env->SetObjectField(obj, fidNumber, driverVersion);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "vendorId", "J");
-    env->SetLongField(obj, fidNumber, (jlong)properties.vendorID);
+    fidNumber = env->GetFieldID(propertiesClazz, "vendorId", "Ljava/lang/String;");
+    jstring vendorId = env->NewStringUTF(asHexString(properties.vendorID).c_str());
+    env->SetObjectField(obj, fidNumber, vendorId);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "deviceId", "J");
-    env->SetLongField(obj, fidNumber, (jlong)properties.deviceID);
+    fidNumber = env->GetFieldID(propertiesClazz, "deviceId", "Ljava/lang/String;");
+    jstring deviceId = env->NewStringUTF(asHexString(properties.deviceID).c_str());
+    env->SetObjectField(obj, fidNumber, deviceId);
 
     fidNumber = env->GetFieldID(propertiesClazz, "physicalDeviceType", "I");
     env->SetIntField(obj, fidNumber, (jint)properties.deviceType);
@@ -101,7 +137,13 @@ void populatePhysicalDevicePropertiesObject(JNIEnv *env, VkPhysicalDevicePropert
     env->SetObjectField(obj, fidNumber, deviceName);
 }
 
-void populatePhysicalDeviceLimitsObject(JNIEnv* env, VkPhysicalDeviceLimits limits, jobject obj)
+/**
+ * Populates the fields of the <code>PhysicalDeviceLimits</code> Java object.
+ * @param env The JNI environment.
+ * @param limits The <code>VkPhysicalDeviceLimits</code> that contains the Vulkan device limits.
+ * @param obj (OUT param) The <code>PhysicalDeviceLimits</code> Java object to populate.
+ */
+void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimits limits, jobject obj)
 {
     jclass limitsClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceLimits");
 
@@ -126,7 +168,13 @@ void populatePhysicalDeviceLimitsObject(JNIEnv* env, VkPhysicalDeviceLimits limi
     // TODO: Continue here populating limits. Forever...
 }
 
-void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, VkPhysicalDeviceSparseProperties properties, jobject obj)
+/**
+ * Populates the fields of the <code>PhysicalDeviceSparseLimits</code> Java object.
+ * @param env The JNI environment.
+ * @param properties The <code>VkPhysicalDeviceSparseProperties</code> that contains the properties.
+ * @param obj (OUT param) The <code>PhysicalDeviceSparseProperties</code> Java object to populate.
+ */
+void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, const VkPhysicalDeviceSparseProperties properties, jobject obj)
 {
     jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceSparseProperties");
 
@@ -142,7 +190,7 @@ void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, VkPhysicalDeviceS
     fidNumber = env->GetFieldID(propertiesClazz, "residencyAlignedMipSize", "Z");
     env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyAlignedMipSize);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "residencyNonResidentScrict", "Z");
+    fidNumber = env->GetFieldID(propertiesClazz, "residencyNonResidentStrict", "Z");
     env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyNonResidentStrict);
 }
 
@@ -151,56 +199,57 @@ JNIEXPORT jobject JNICALL
 Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
                                                       jstring app_name, jstring engine_name)
 {
-    const std::string VK_INFO_CLASS_NAME = "com/example/vulkaninfoapp/VkInfo";
-    const std::string INSTANCE_INFO_CLASS_NAME = "com/example/vulkaninfoapp/InstanceInfo";
-    const std::string PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME = "com/example/vulkaninfoapp/PhysicalDeviceProperties";
-    const std::string PHYSICAL_DEVICE_LIMITS_CLASS_NAME = "com/example/vulkaninfoapp/PhysicalDeviceLimits";
-    const std::string PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_NAME = "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties";
+    const std::string VkInfoClassName = "com/example/vulkaninfoapp/VkInfo";
+    const std::string InstanceInfoClassName = "com/example/vulkaninfoapp/InstanceInfo";
+    const std::string PhysicalDevicePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceProperties";
+    const std::string PhysicalDeviceLimitsClassName = "com/example/vulkaninfoapp/PhysicalDeviceLimits";
+    const std::string PhysicalDeviceSparsePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties";
 
-    const std::string INSTANCE_INFO_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/InstanceInfo;";
-    const std::string PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
-    const std::string PHYSICAL_DEVICE_LIMITS_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceLimits;";
-    const std::string PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_SIGNATURE = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
-    VkInfo vkInfo = {};
-    Instance instance = initInstance(env, app_name, engine_name);
-    if (instance.getInstance() == VK_NULL_HANDLE)
+    const std::string InstanceInfoClassSignature = "Lcom/example/vulkaninfoapp/InstanceInfo;";
+    const std::string PhysicalDevicePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
+    const std::string PhysicalDeviceLimitsClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceLimits;";
+    const std::string PhysicalDeviceSparsePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
+
+    VkInfo vkInfo;
+    Instance instance = Instance(env->GetStringUTFChars(app_name, nullptr), env->GetStringUTFChars(engine_name, nullptr), {}, {});
+    vkInfo.instance = instance;
+    if (vkInfo.instance.getHandle() == VK_NULL_HANDLE || vkInfo.instance.getNumberPhysicalDevices() == 0)
     {
         return nullptr;
     }
 
-    // Get info from actual Vulkan instance on the device.
-    vkInfo.instanceInfo = getInstanceInfo(instance);
-    vkInfo.selectedPhysicalDevice = vkInfo.instanceInfo.devices[0];
-    vkInfo.physicalDeviceProperties = getPhysicalDeviceProperties(vkInfo.selectedPhysicalDevice);
+    // For now this app is only designed to run on SoC devices which have only 1 GPU. So just choose the first one.
+    vkInfo.selectedPhysicalDevice = vkInfo.instance.getPhysicalDevices()[0];
+    vkInfo.physicalDeviceProperties = PhysicalDevice::getDeviceProperties(vkInfo.selectedPhysicalDevice);
 
     // Get an instance of the VkInfo Java object.
-    jobject vkInfoObject = getObject(env, VK_INFO_CLASS_NAME.c_str());
+    jobject vkInfoObject = getObject(env, VkInfoClassName.c_str());
 
     // Populate the instanceInfo Java object.
-    jfieldID fidNumber = env->GetFieldID(env->FindClass(VK_INFO_CLASS_NAME.c_str()), "instanceInfo", INSTANCE_INFO_CLASS_SIGNATURE.c_str());
-    jobject instanceInfoObject = getObject(env, INSTANCE_INFO_CLASS_NAME.c_str());
-    populateInstanceInfoObject(env, vkInfo.instanceInfo, instanceInfoObject);
-    env->SetObjectField(vkInfoObject, fidNumber, instanceInfoObject);
+    jfieldID fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "instanceInfo", InstanceInfoClassSignature.c_str());
+    jobject instanceInfoObject = getObject(env, InstanceInfoClassName.c_str());
+    populateInstanceInfoObject(env, vkInfo.instance, instanceInfoObject);
+    env->SetObjectField(vkInfoObject, fieldId, instanceInfoObject);
 
     // Populate the physicalDeviceProperties Java object.
-    jobject physicalDevicePropertiesObject = getObject(env, PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME.c_str());
+    jobject physicalDevicePropertiesObject = getObject(env, PhysicalDevicePropertiesClassName.c_str());
 
     // Populate physicalDeviceProperties.limits Java object.
-    fidNumber = env->GetFieldID(env->FindClass(PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME.c_str()), "physicalDeviceLimits", PHYSICAL_DEVICE_LIMITS_CLASS_SIGNATURE.c_str());
-    jobject physicalDeviceLimitsObject = getObject(env, PHYSICAL_DEVICE_LIMITS_CLASS_NAME.c_str());
+    fieldId = env->GetFieldID(env->FindClass(PhysicalDevicePropertiesClassName.c_str()), "physicalDeviceLimits", PhysicalDeviceLimitsClassSignature.c_str());
+    jobject physicalDeviceLimitsObject = getObject(env, PhysicalDeviceLimitsClassName.c_str());
     populatePhysicalDeviceLimitsObject(env, vkInfo.physicalDeviceProperties.limits, physicalDeviceLimitsObject);
-    env->SetObjectField(physicalDevicePropertiesObject, fidNumber, physicalDeviceLimitsObject);
+    env->SetObjectField(physicalDevicePropertiesObject, fieldId, physicalDeviceLimitsObject);
 
     // Populate physicalDeviceProperties.sparseProperties Java object.
-    fidNumber = env->GetFieldID(env->FindClass(PHYSICAL_DEVICE_PROPERTIES_CLASS_NAME.c_str()), "physicalDeviceSparseProperties", PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_SIGNATURE.c_str());
-    jobject physicalDeviceSparsePropertiesObject = getObject(env, PHYSICAL_DEVICE_SPARSE_PROPERTIES_CLASS_NAME.c_str());
+    fieldId = env->GetFieldID(env->FindClass(PhysicalDevicePropertiesClassName.c_str()), "physicalDeviceSparseProperties", PhysicalDeviceSparsePropertiesClassSignature.c_str());
+    jobject physicalDeviceSparsePropertiesObject = getObject(env, PhysicalDeviceSparsePropertiesClassName.c_str());
     populatePhysicalDeviceSparsePropertiesObject(env, vkInfo.physicalDeviceProperties.sparseProperties, physicalDeviceSparsePropertiesObject);
-    env->SetObjectField(physicalDevicePropertiesObject, fidNumber, physicalDeviceSparsePropertiesObject);
+    env->SetObjectField(physicalDevicePropertiesObject, fieldId, physicalDeviceSparsePropertiesObject);
 
     // Set the physicalDeviceProperties field of the Java VkInfo object.
     populatePhysicalDevicePropertiesObject(env, vkInfo.physicalDeviceProperties, physicalDevicePropertiesObject);
-    fidNumber = env->GetFieldID(env->FindClass(VK_INFO_CLASS_NAME.c_str()), "physicalDeviceProperties", PHYSICAL_DEVICE_PROPERTIES_CLASS_SIGNATURE.c_str());
-    env->SetObjectField(vkInfoObject, fidNumber, physicalDevicePropertiesObject);
+    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceProperties", PhysicalDevicePropertiesClassSignature.c_str());
+    env->SetObjectField(vkInfoObject, fieldId, physicalDevicePropertiesObject);
 
     return vkInfoObject;
 }

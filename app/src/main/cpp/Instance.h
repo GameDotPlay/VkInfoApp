@@ -7,13 +7,16 @@
 #include <vector>
 #include <jni.h>
 
+/**
+ * Wrapper class for a <code>VkInstance</code>.
+ */
 class Instance
 {
 public:
     Instance();
     Instance(const std::string& appName, const std::string& engineName, const std::vector<const char*>& extensions, const std::vector<const char*>& layers);
     ~Instance();
-    VkInstance getInstance() const;
+    VkInstance getHandle() const;
     std::string getAppName() const;
     std::string getEngineName() const;
     uint32_t getNumberPhysicalDevices() const;
@@ -23,5 +26,4 @@ private:
     VkInstance handle = VK_NULL_HANDLE;
     std::string appName;
     std::string engineName;
-
 };

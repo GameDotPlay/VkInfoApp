@@ -6,7 +6,7 @@
 
 struct VkInfo
 {
-    InstanceInfo instanceInfo;
+    Instance instance = {};
     VkPhysicalDevice selectedPhysicalDevice = VK_NULL_HANDLE;
     VkPhysicalDeviceProperties physicalDeviceProperties = {};
 };

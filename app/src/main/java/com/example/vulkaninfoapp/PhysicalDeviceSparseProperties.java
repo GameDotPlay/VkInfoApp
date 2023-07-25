@@ -5,5 +5,5 @@ public class PhysicalDeviceSparseProperties {
     public boolean residencyStandard2DMultisampleBlockShape;
     public boolean residencyStandard3DBlockShape;
     public boolean residencyAlignedMipSize;
-    public boolean residencyNonResidentScrict;
+    public boolean residencyNonResidentStrict;
 }

@@ -1,10 +1,10 @@
 package com.example.vulkaninfoapp;
 
 public class PhysicalDeviceProperties {
-    public long apiVersion;
-    public long driverVersion;
-    public long vendorId;
-    public long deviceId;
+    public String apiVersion;
+    public String driverVersion;
+    public String vendorId;
+    public String deviceId;
     public int physicalDeviceType;
     public String deviceName;
     public PhysicalDeviceLimits physicalDeviceLimits;

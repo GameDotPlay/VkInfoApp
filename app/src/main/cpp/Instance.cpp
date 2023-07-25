@@ -2,6 +2,24 @@
 #include <stdexcept>
 #include <jni.h>
 
+/**
+ * The default class constructor.
+ * Does not initialize a <code>VkInstance</code>.
+ */
+Instance::Instance()
+{
+    this->handle = VK_NULL_HANDLE;
+    this->appName.clear();
+    this->engineName.clear();
+}
+
+/**
+ * Constructor for <code>Instance</code> class.
+ * @param appName The application name to give to the <code>VkInstance</code>.
+ * @param engineName The engine name to give to the <code>VkInstance</code>.
+ * @param extensions The list of extension names to initialize the <code>VkInstance</code> with.
+ * @param layers The list of layer names to initialize the <code>VkInstance</code> with.
+ */
 Instance::Instance(const std::string& appName, const std::string& engineName, const std::vector<const char*>& extensions, const std::vector<const char*>& layers)
 {
     this->appName = appName;
@@ -11,8 +29,8 @@ Instance::Instance(const std::string& appName, const std::string& engineName, co
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pApplicationName = appName.c_str();
     appInfo.pEngineName = engineName.c_str();
-    appInfo.engineVersion = VK_MAKE_API_VERSION(1, 1, 0, 0);
-    appInfo.applicationVersion = VK_MAKE_API_VERSION(1, 0, 0, 0);
+    appInfo.engineVersion = VK_MAKE_API_VERSION(0, 1, 0, 0);
+    appInfo.applicationVersion = VK_MAKE_API_VERSION(0, 1, 0, 0);
     appInfo.apiVersion = VK_API_VERSION_1_0;
 
     VkInstanceCreateInfo createInfo = {};
@@ -25,25 +43,43 @@ Instance::Instance(const std::string& appName, const std::string& engineName, co
 
     if (vkCreateInstance(&createInfo, nullptr, &this->handle) != VK_SUCCESS)
     {
-        throw std::runtime_error("Failed to create VkInstance!");
+        this->handle = VK_NULL_HANDLE;
+        this->appName.clear();
+        this->engineName.clear();
     }
 }
 
-VkInstance Instance::getInstance() const
+/**
+ * Gets the <code>VkInstance</code> handle.
+ * @return the <code>VkInstance</code> handle.
+ */
+VkInstance Instance::getHandle() const
 {
     return this->handle;
 }
 
+/**
+ * Gets the application name.
+ * @return the application name.
+ */
 std::string Instance::getAppName() const
 {
     return this->appName;
 }
 
+/**
+ * Gets the engine name.
+ * @return the engine name.
+ */
 std::string Instance::getEngineName() const
 {
     return this->engineName;
 }
 
+/**
+ * Class destructor.
+ * Calls <code>vkDestroyInstance</code> on the <code>VkInstance</code>.
+ */
 Instance::~Instance()
 {
     if (this->handle != VK_NULL_HANDLE)
@@ -52,6 +88,10 @@ Instance::~Instance()
     }
 }
 
+/**
+ * Gets the number of physical devices accessible by this Vulkan instance.
+ * @return the number of physical devices.
+ */
 uint32_t Instance::getNumberPhysicalDevices() const
 {
     if (this->handle == VK_NULL_HANDLE)
@@ -68,6 +108,10 @@ uint32_t Instance::getNumberPhysicalDevices() const
     return numDevices;
 }
 
+/**
+ * Gets the list of physical devices accessible by this Vulkan instance.
+ * @return the list of physical devices.
+ */
 std::vector<VkPhysicalDevice> Instance::getPhysicalDevices() const
 {
     if (this->handle == VK_NULL_HANDLE)
@@ -88,9 +132,4 @@ std::vector<VkPhysicalDevice> Instance::getPhysicalDevices() const
     }
 
     return devices;
-}
-
-Instance::Instance()
-{
-
 }

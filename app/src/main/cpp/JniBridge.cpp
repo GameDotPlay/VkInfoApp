@@ -165,6 +165,42 @@ void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimit
     fidNumber = env->GetFieldID(limitsClazz, "maxTexelBufferElements", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxTexelBufferElements);
 
+    fidNumber = env->GetFieldID(limitsClazz, "maxUniformBufferRange", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxUniformBufferRange);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxStorageBufferRange", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxStorageBufferRange);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPushConstantsSize", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPushConstantsSize);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxMemoryAllocationCount", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxMemoryAllocationCount);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxSamplerAllocationCount", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxSamplerAllocationCount);
+
+    fidNumber = env->GetFieldID(limitsClazz, "bufferImageGranularity", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.bufferImageGranularity);
+
+    fidNumber = env->GetFieldID(limitsClazz, "sparseAddressSpaceSize", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.sparseAddressSpaceSize);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxBoundDescriptorSets", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxBoundDescriptorSets);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorSamplers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorSamplers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorUniformBuffers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorUniformBuffers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorStorageBuffers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorStorageBuffers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorSampledImages", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorSampledImages);
+
     // TODO: Continue here populating limits. Forever...
 }
 

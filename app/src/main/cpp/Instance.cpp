@@ -8,9 +8,24 @@
  */
 Instance::Instance()
 {
-    this->handle = VK_NULL_HANDLE;
     this->appName.clear();
     this->engineName.clear();
+    this->handle = VK_NULL_HANDLE;
+}
+
+Instance::Instance(const Instance& other)
+{
+    this->appName = other.appName;
+    this->engineName = other.engineName;
+
+    if (other.handle != VK_NULL_HANDLE)
+    {
+        this->handle = other.handle;
+    }
+    else
+    {
+        this->handle = VK_NULL_HANDLE;
+    }
 }
 
 /**
@@ -85,6 +100,7 @@ Instance::~Instance()
     if (this->handle != VK_NULL_HANDLE)
     {
         vkDestroyInstance(this->handle, nullptr);
+        this->handle = VK_NULL_HANDLE;
     }
 }
 

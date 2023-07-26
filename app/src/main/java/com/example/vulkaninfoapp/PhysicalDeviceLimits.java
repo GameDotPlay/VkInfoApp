@@ -14,8 +14,8 @@ public class PhysicalDeviceLimits {
     public long maxPushConstantsSize;
     public long maxMemoryAllocationCount;
     public long maxSamplerAllocationCount;
-    public BigInteger bufferImageGranularity;
-    public BigInteger sparseAddressSpaceSize;
+    public long bufferImageGranularity;
+    public long sparseAddressSpaceSize;
     public long maxBoundDescriptorSets;
     public long maxPerStageDescriptorSamplers;
     public long maxPerStageDescriptorStorageBuffers;
@@ -70,9 +70,9 @@ public class PhysicalDeviceLimits {
     public float[] viewportBoundsRange = new float[2];
     public long viewportSubPixelBits;
     public long minMemoryMapAlignment;
-    public BigInteger minTexelBufferOffsetAlignment;
-    public  BigInteger minUniformBufferOffsetAlignment;
-    public BigInteger minStorageBufferOffsetAlignment;
+    public long minTexelBufferOffsetAlignment;
+    public long minUniformBufferOffsetAlignment;
+    public long minStorageBufferOffsetAlignment;
     public long minTexelOffset;
     public long maxTexelOffset;
     public long minTexelGatherOffset;
@@ -106,7 +106,7 @@ public class PhysicalDeviceLimits {
     public float lineWidthGranularity;
     public boolean strictLines;
     public boolean standardSampleLocations;
-    public BigInteger optimalBufferCopyOffsetAlignment;
-    public BigInteger optimalBufferCopyRowPitchAlignment;
-    public BigInteger nonCoherentAtomSize;
+    public long optimalBufferCopyOffsetAlignment;
+    public long optimalBufferCopyRowPitchAlignment;
+    public long nonCoherentAtomSize;
 }

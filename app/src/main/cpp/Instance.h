@@ -14,6 +14,7 @@ class Instance
 {
 public:
     Instance();
+    Instance(const Instance& other);
     Instance(const std::string& appName, const std::string& engineName, const std::vector<const char*>& extensions, const std::vector<const char*>& layers);
     ~Instance();
     VkInstance getHandle() const;

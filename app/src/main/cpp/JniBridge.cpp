@@ -33,22 +33,13 @@ std::string asHexString(const uint32_t value)
     return ss.str();
 }
 
-/**
- * Initializes a <code>VkInstance</code> on the device.
- * @param env The JNI environment.
- * @param app_name The application name to give to the <code>VkInstance</code>.
- * @param engine_name The engine name to give to the <code>VkInstance</code>.
- * @return the <code>Instance</code> object.
- */
-Instance getInstance(JNIEnv *env, const jstring app_name, const jstring engine_name)
+std::string getSampleCountDescription(const uint32_t sampleCountBit)
 {
-    std::string appName(env->GetStringUTFChars(app_name, nullptr));
-    std::string engineName(env->GetStringUTFChars(engine_name, nullptr));
-
-    std::vector<const char*> extensions = {};
-    std::vector<const char*> layers = {};
-
-    return Instance(appName, engineName, extensions, layers);
+    std::string description;
+    switch (sampleCountBit)
+    {
+        // TODO: Continue here
+    }
 }
 
 /**
@@ -200,6 +191,206 @@ void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimit
 
     fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorSampledImages", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorSampledImages);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorStorageImages", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorStorageImages);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageDescriptorInputAttachments", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageDescriptorInputAttachments);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxPerStageResources", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxPerStageResources);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetSamplers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetSamplers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetUniformBuffers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetUniformBuffers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetUniformBuffersDynamic", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetUniformBuffers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetStorageBuffers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetStorageBuffers);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetStorageBuffersDynamic", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetStorageBuffersDynamic);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetSampledImages", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetSampledImages);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetStorageImages", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetStorageImages);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDescriptorSetInputAttachments", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDescriptorSetInputAttachments);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxVertexInputAttributes", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxVertexInputAttributes);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxVertexInputBindings", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxVertexInputBindings);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxVertexInputAttributeOffset", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxVertexInputAttributeOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxVertexInputBindingStride", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxVertexInputBindingStride);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxVertexOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxVertexOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationGenerationLevel", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationGenerationLevel);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationPatchSize", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationPatchSize);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationControlPerVertexInputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationControlPerVertexInputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationControlPerVertexOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationControlPerVertexOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationControlPerPatchOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationControlPerPatchOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationControlTotalOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationControlTotalOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationEvaluationInputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationEvaluationInputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTessellationEvaluationOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTessellationEvaluationOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxGeometryShaderInvocations", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxGeometryShaderInvocations);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxGeometryInputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxGeometryInputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxGeometryOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxGeometryOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxGeometryOutputVertices", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxGeometryOutputVertices);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxGeometryTotalOutputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxGeometryTotalOutputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFragmentInputComponents", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFragmentInputComponents);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFragmentOutputAttachments", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFragmentOutputAttachments);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFragmentDualSrcAttachments", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFragmentDualSrcAttachments);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFragmentCombinedOutputResources", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFragmentCombinedOutputResources);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxComputeSharedMemorySize", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxComputeSharedMemorySize);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxComputeWorkGroupCount", "[J");
+    jlongArray outJLongs = env->NewLongArray(3);
+    jlong computeWorkGroupCount[] = {limits.maxComputeWorkGroupCount[0], limits.maxComputeWorkGroupCount[1], limits.maxComputeWorkGroupCount[2]};
+    env->SetLongArrayRegion(outJLongs, 0, 3, computeWorkGroupCount);
+    env->SetObjectField(obj, fidNumber, outJLongs);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxComputeWorkGroupInvocations", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxComputeWorkGroupInvocations);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxComputeWorkGroupSize", "[J");
+    outJLongs = env->NewLongArray(3);
+    jlong computeWorkGroupSize[] = {limits.maxComputeWorkGroupSize[0], limits.maxComputeWorkGroupSize[1], limits.maxComputeWorkGroupSize[2]};
+    env->SetLongArrayRegion(outJLongs, 0, 3, computeWorkGroupSize);
+    env->SetObjectField(obj, fidNumber, outJLongs);
+
+    fidNumber = env->GetFieldID(limitsClazz, "subPixelPrecisionBits", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.subPixelPrecisionBits);
+
+    fidNumber = env->GetFieldID(limitsClazz, "subTexelPrecisionBits", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.subTexelPrecisionBits);
+
+    fidNumber = env->GetFieldID(limitsClazz, "mipmapPrecisionBits", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.mipmapPrecisionBits);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDrawIndexedIndexValue", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDrawIndexedIndexValue);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxDrawIndirectCount", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxDrawIndirectCount);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxSamplerLodBias", "F");
+    env->SetFloatField(obj, fidNumber, (jfloat)limits.maxSamplerLodBias);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxSamplerAnisotropy", "F");
+    env->SetFloatField(obj, fidNumber, (jfloat)limits.maxSamplerAnisotropy);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxViewports", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxViewports);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxViewportDimensions", "[J");
+    outJLongs = env->NewLongArray(2);
+    jlong viewportDimensions[] = {limits.maxViewportDimensions[0], limits.maxViewportDimensions[1]};
+    env->SetLongArrayRegion(outJLongs, 0, 2, viewportDimensions);
+    env->SetObjectField(obj, fidNumber, outJLongs);
+
+    fidNumber = env->GetFieldID(limitsClazz, "viewportBoundsRange", "[F");
+    jfloatArray outJFloats = env->NewFloatArray(2);
+    jfloat boundsRange[] = {limits.viewportBoundsRange[0], limits.viewportBoundsRange[1]};
+    env->SetFloatArrayRegion(outJFloats, 0, 2,boundsRange);
+    env->SetObjectField(obj, fidNumber, outJFloats);
+
+    fidNumber = env->GetFieldID(limitsClazz, "viewportSubPixelBits", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.viewportSubPixelBits);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minMemoryMapAlignment", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.minMemoryMapAlignment);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minTexelBufferOffsetAlignment", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.minTexelBufferOffsetAlignment);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minUniformBufferOffsetAlignment", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.minUniformBufferOffsetAlignment);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minStorageBufferOffsetAlignment", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.minStorageBufferOffsetAlignment);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minTexelOffset", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.minTexelOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTexelOffset", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTexelOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minTexelGatherOffset", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.minTexelGatherOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxTexelGatherOffset", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxTexelGatherOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "minInterpolationOffset", "F");
+    env->SetFloatField(obj, fidNumber, (jfloat)limits.minInterpolationOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxInterpolationOffset", "F");
+    env->SetFloatField(obj, fidNumber, (jfloat)limits.maxInterpolationOffset);
+
+    fidNumber = env->GetFieldID(limitsClazz, "subPixelInterpolationOffsetBits", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.subPixelInterpolationOffsetBits);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFramebufferWidth", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFramebufferWidth);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFramebufferHeight", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFramebufferHeight);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxFramebufferLayers", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxFramebufferLayers);
+
+
 
     // TODO: Continue here populating limits. Forever...
 }

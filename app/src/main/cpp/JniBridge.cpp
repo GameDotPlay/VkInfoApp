@@ -87,20 +87,20 @@ jobject getObject(JNIEnv *env, const char* className, const char* constructorSig
  * @param instance The <code>VkInstance</code> that contains the Vulkan instance data.
  * @param instanceInfoObject (OUT param) The <code>InstanceInfo</code> Java object to populate.
  */
-void populateInstanceInfoObject(JNIEnv *env, const Instance& instance, jobject instanceInfoObject)
+void populateInstanceInfoObject(JNIEnv *env, const Instance* instance, jobject instanceInfoObject)
 {
     jclass instanceInfoClass = env->FindClass("com/example/vulkaninfoapp/InstanceInfo");
 
     jfieldID fidNumber = env->GetFieldID(instanceInfoClass, "appName", "Ljava/lang/String;");
-    jstring appName = env->NewStringUTF(instance.getAppName().c_str());
+    jstring appName = env->NewStringUTF(instance->getAppName().c_str());
     env->SetObjectField(instanceInfoObject, fidNumber, appName);
 
     fidNumber = env->GetFieldID(instanceInfoClass, "engineName", "Ljava/lang/String;");
-    jstring engineNameFromInstance = env->NewStringUTF(instance.getEngineName().c_str());
+    jstring engineNameFromInstance = env->NewStringUTF(instance->getEngineName().c_str());
     env->SetObjectField(instanceInfoObject, fidNumber, engineNameFromInstance);
 
     fidNumber = env->GetFieldID(instanceInfoClass, "numDevices", "I");
-    env->SetIntField(instanceInfoObject, fidNumber, (int)instance.getNumberPhysicalDevices());
+    env->SetIntField(instanceInfoObject, fidNumber, (int)instance->getNumberPhysicalDevices());
 }
 
 /**
@@ -211,15 +211,14 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     const std::string PhysicalDeviceSparsePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
 
     VkInfo vkInfo;
-    Instance instance = Instance(env->GetStringUTFChars(app_name, nullptr), env->GetStringUTFChars(engine_name, nullptr), {}, {});
-    vkInfo.instance = instance;
-    if (vkInfo.instance.getHandle() == VK_NULL_HANDLE || vkInfo.instance.getNumberPhysicalDevices() == 0)
+    vkInfo.instance = new Instance(env->GetStringUTFChars(app_name, nullptr), env->GetStringUTFChars(engine_name, nullptr), {}, {});
+    if (vkInfo.instance->getHandle() == VK_NULL_HANDLE || vkInfo.instance->getNumberPhysicalDevices() == 0)
     {
         return nullptr;
     }
 
     // For now this app is only designed to run on SoC devices which have only 1 GPU. So just choose the first one.
-    vkInfo.selectedPhysicalDevice = vkInfo.instance.getPhysicalDevices()[0];
+    vkInfo.selectedPhysicalDevice = vkInfo.instance->getPhysicalDevices()[0];
     vkInfo.physicalDeviceProperties = PhysicalDevice::getDeviceProperties(vkInfo.selectedPhysicalDevice);
 
     // Get an instance of the VkInfo Java object.
@@ -251,5 +250,6 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceProperties", PhysicalDevicePropertiesClassSignature.c_str());
     env->SetObjectField(vkInfoObject, fieldId, physicalDevicePropertiesObject);
 
+    delete vkInfo.instance;
     return vkInfoObject;
 }

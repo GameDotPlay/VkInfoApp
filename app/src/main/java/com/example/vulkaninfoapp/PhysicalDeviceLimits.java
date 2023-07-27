@@ -1,7 +1,5 @@
 package com.example.vulkaninfoapp;
 
-import java.math.BigInteger;
-
 public class PhysicalDeviceLimits {
     public long maxImageDimension1D;
     public long maxImageDimension2D;

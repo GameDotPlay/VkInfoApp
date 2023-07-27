@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'vulkaninfoapp' library on application startup.
     static {
         System.loadLibrary("vulkaninfoapp");
     }
@@ -265,10 +264,6 @@ public class MainActivity extends AppCompatActivity {
             childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.numDevices.ordinal()], String.valueOf(instanceInfo.numDevices)));
         }
     }
-
-    /**
-     * A native method that is implemented by the 'vulkaninfoapp' native library,
-     * which is packaged with this application.
-     */
+    
     private native static VkInfo getVkInfo(String appName, String engineName);
 }

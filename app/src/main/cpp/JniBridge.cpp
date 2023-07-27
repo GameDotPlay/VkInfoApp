@@ -34,47 +34,6 @@ std::string asHexString(const uint32_t value)
 }
 
 /**
- * Gets a sample count description based on the <code>VkSampleCountFlagBit</code> provided.
- * @param sampleCountBit The <code>VkSampleCountFlagBit</code> to parse.
- * @return the description of the <code>VkSampleCountFlagBit</code> value.
- */
-std::string getSampleCountDescription(const VkSampleCountFlags sampleCountFlags)
-{
-    std::string description;
-    VkSampleCountFlagBits sampleCountBit = (VkSampleCountFlagBits)sampleCountFlags;
-
-    switch (sampleCountBit)
-    {
-        case 0x00000001:
-            description = "1 sample per pixel";
-            break;
-        case 0x00000002:
-            description = "2 samples per pixel";
-            break;
-        case 0x00000004:
-            description = "4 samples per pixel";
-            break;
-        case 0x00000008:
-            description = "8 samples per pixel";
-            break;
-        case 0x00000010:
-            description = "16 samples per pixel";
-            break;
-        case 0x00000020:
-            description = "32 samples per pixel";
-            break;
-        case 0x00000040:
-            description = "64 samples per pixel";
-            break;
-        default:
-            description = "Unknown SampleCountFlagBit value";
-            break;
-    }
-
-    return description;
-}
-
-/**
  * Gets a Java object instance based on the parameters provided.
  * @param env The JNI environment.
  * @param className The fully qualified Java class name.
@@ -422,44 +381,35 @@ void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimit
     fidNumber = env->GetFieldID(limitsClazz, "maxFramebufferLayers", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxFramebufferLayers);
 
-    fidNumber = env->GetFieldID(limitsClazz, "framebufferColorSampleCounts", "Ljava/lang/String;");
-    jstring outJString = env->NewStringUTF(getSampleCountDescription(limits.framebufferColorSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "framebufferColorSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.framebufferColorSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "framebufferDepthSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.framebufferDepthSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "framebufferDepthSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.framebufferDepthSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "framebufferStencilSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.framebufferStencilSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "framebufferStencilSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.framebufferStencilSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "framebufferNoAttachmentsSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.framebufferNoAttachmentsSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "framebufferNoAttachmentsSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.framebufferNoAttachmentsSampleCounts);
 
     fidNumber = env->GetFieldID(limitsClazz, "maxColorAttachments", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxColorAttachments);
 
-    fidNumber = env->GetFieldID(limitsClazz, "sampledImageColorSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.sampledImageColorSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "sampledImageColorSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.sampledImageColorSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "sampledImageIntegerSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.sampledImageIntegerSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "sampledImageIntegerSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.sampledImageIntegerSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "sampledImageDepthSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.sampledImageDepthSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "sampledImageDepthSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.sampledImageDepthSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "sampledImageStencilSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.sampledImageStencilSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "sampledImageStencilSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.sampledImageStencilSampleCounts);
 
-    fidNumber = env->GetFieldID(limitsClazz, "storageImageSampleCounts", "Ljava/lang/String;");
-    outJString = env->NewStringUTF(getSampleCountDescription(limits.storageImageSampleCounts).c_str());
-    env->SetObjectField(obj, fidNumber, outJString);
+    fidNumber = env->GetFieldID(limitsClazz, "storageImageSampleCounts", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.storageImageSampleCounts);
 
     fidNumber = env->GetFieldID(limitsClazz, "maxSampleMaskWords", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxSampleMaskWords);

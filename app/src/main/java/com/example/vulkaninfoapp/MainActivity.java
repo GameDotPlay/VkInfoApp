@@ -198,8 +198,51 @@ public class MainActivity extends AppCompatActivity {
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxViewports.ordinal()], String.valueOf(limits.maxViewports)));
             childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxViewportDimensions.ordinal()],
                     "{" + String.valueOf(limits.maxViewportDimensions[0]) + ", " + String.valueOf(limits.maxViewportDimensions[1]) + "}"));
-
-            // TODO: Continue here populating limits. Forever...
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.ViewportBoundsRange.ordinal()],
+                    "{" + String.valueOf(limits.viewportBoundsRange[0]) + ", " + String.valueOf(limits.viewportBoundsRange[1]) + "}"));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.ViewportSubPixelBits.ordinal()], String.valueOf(limits.viewportSubPixelBits)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinMemoryMapAlignment.ordinal()], String.valueOf(limits.minMemoryMapAlignment)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinTexelBufferOffsetAlignment.ordinal()], String.valueOf(limits.minTexelBufferOffsetAlignment)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinUniformBufferOffsetAlignment.ordinal()], String.valueOf(limits.minUniformBufferOffsetAlignment)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinStorageBufferOffsetAlignment.ordinal()], String.valueOf(limits.minStorageBufferOffsetAlignment)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinTexelOffset.ordinal()], String.valueOf(limits.minTexelOffset)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxTexelOffset.ordinal()], String.valueOf(limits.maxTexelOffset)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinTexelGatherOffset.ordinal()], String.valueOf(limits.minTexelGatherOffset)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxTexelGatherOffset.ordinal()], String.valueOf(limits.maxTexelGatherOffset)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MinInterpolationOffset.ordinal()], String.valueOf(limits.minInterpolationOffset)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxInterpolationOffset.ordinal()], String.valueOf(limits.maxInterpolationOffset)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.SubPixelInterpolationOffsetBits.ordinal()], String.valueOf(limits.subPixelInterpolationOffsetBits)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxFramebufferWidth.ordinal()], String.valueOf(limits.maxFramebufferWidth)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxFramebufferHeight.ordinal()], String.valueOf(limits.maxFramebufferHeight)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxFramebufferLayers.ordinal()], String.valueOf(limits.maxFramebufferLayers)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.FramebufferColorSampleCounts.ordinal()], String.valueOf(limits.framebufferColorSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.FramebufferDepthSampleCounts.ordinal()], String.valueOf(limits.framebufferDepthSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.FramebufferStencilSampleCounts.ordinal()], String.valueOf(limits.framebufferStencilSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.FramebufferNoAttachmentsSampleCounts.ordinal()], String.valueOf(limits.framebufferNoAttachmentsSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxColorAttachments.ordinal()], String.valueOf(limits.maxColorAttachments)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.SampledImageColorSampleCounts.ordinal()], String.valueOf(limits.sampledImageColorSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.SampledImageIntegerSampleCounts.ordinal()], String.valueOf(limits.sampledImageIntegerSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.SampledImageDepthSampleCounts.ordinal()], String.valueOf(limits.sampledImageDepthSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.SampledImageStencilSampleCounts.ordinal()], String.valueOf(limits.sampledImageStencilSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.StorageImageSampleCounts.ordinal()], String.valueOf(limits.storageImageSampleCounts)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxSampleMaskWords.ordinal()], String.valueOf(limits.maxSampleMaskWords)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.TimestampComputeAndGraphics.ordinal()], String.valueOf(limits.timestampComputeAndGraphics)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.TimestampPeriod.ordinal()], String.valueOf(limits.timestampPeriod)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxClipDistances.ordinal()], String.valueOf(limits.maxClipDistances)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxCullDistances.ordinal()], String.valueOf(limits.maxCullDistances)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.MaxCombinedClipAndCullDistances.ordinal()], String.valueOf(limits.maxCombinedClipAndCullDistances)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.DiscreteQueuePriorities.ordinal()], String.valueOf(limits.discreteQueuePriorities)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.PointSizeRange.ordinal()],
+                    "{" + String.valueOf(limits.pointSizeRange[0]) + ", " + String.valueOf(limits.pointSizeRange[1]) + "}"));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.LineWidthRange.ordinal()],
+                    "{" + String.valueOf(limits.lineWidthRange[0]) + ", " + String.valueOf(limits.lineWidthRange[1]) + "}"));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.PointSizeGranularity.ordinal()], String.valueOf(limits.pointSizeGranularity)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.LineWidthGranularity.ordinal()], String.valueOf(limits.lineWidthGranularity)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.StrictLines.ordinal()], String.valueOf(limits.strictLines)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.StandardSampleLocations.ordinal()], String.valueOf(limits.standardSampleLocations)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.OptimalBufferCopyOffsetAlignment.ordinal()], String.valueOf(limits.optimalBufferCopyOffsetAlignment)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.OptimalBufferCopyRowPitchAlignment.ordinal()], String.valueOf(limits.optimalBufferCopyRowPitchAlignment)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceLimitsNames[PhysicalDeviceLimitsIndices.NonCoherentAtomSize.ordinal()], String.valueOf(limits.nonCoherentAtomSize)));
         }
     }
 

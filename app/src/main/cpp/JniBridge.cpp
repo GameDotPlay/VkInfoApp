@@ -38,9 +38,11 @@ std::string asHexString(const uint32_t value)
  * @param sampleCountBit The <code>VkSampleCountFlagBit</code> to parse.
  * @return the description of the <code>VkSampleCountFlagBit</code> value.
  */
-std::string getSampleCountDescription(const VkSampleCountFlags sampleCountBit)
+std::string getSampleCountDescription(const VkSampleCountFlags sampleCountFlags)
 {
     std::string description;
+    VkSampleCountFlagBits sampleCountBit = (VkSampleCountFlagBits)sampleCountFlags;
+
     switch (sampleCountBit)
     {
         case 0x00000001:
@@ -471,7 +473,47 @@ void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimit
     fidNumber = env->GetFieldID(limitsClazz, "maxClipDistances", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxClipDistances);
 
-    // TODO: Continue here populating limits. Forever...
+    fidNumber = env->GetFieldID(limitsClazz, "maxCullDistances", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxCullDistances);
+
+    fidNumber = env->GetFieldID(limitsClazz, "maxCombinedClipAndCullDistances", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.maxCombinedClipAndCullDistances);
+
+    fidNumber = env->GetFieldID(limitsClazz, "discreteQueuePriorities", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.discreteQueuePriorities);
+
+    fidNumber = env->GetFieldID(limitsClazz, "pointSizeRange", "[F");
+    outJFloats = env->NewFloatArray(2);
+    jfloat pointsSizeRange[] = {limits.pointSizeRange[0], limits.pointSizeRange[1]};
+    env->SetFloatArrayRegion(outJFloats, 0, 2,pointsSizeRange);
+    env->SetObjectField(obj, fidNumber, outJFloats);
+
+    fidNumber = env->GetFieldID(limitsClazz, "lineWidthRange", "[F");
+    outJFloats = env->NewFloatArray(2);
+    jfloat lineWidthRange[] = {limits.lineWidthRange[0], limits.lineWidthRange[1]};
+    env->SetFloatArrayRegion(outJFloats, 0, 2,lineWidthRange);
+    env->SetObjectField(obj, fidNumber, outJFloats);
+
+    fidNumber = env->GetFieldID(limitsClazz, "pointSizeGranularity", "F");
+    env->SetFloatField(obj, fidNumber, (jfloat)limits.pointSizeGranularity);
+
+    fidNumber = env->GetFieldID(limitsClazz, "lineWidthGranularity", "F");
+    env->SetFloatField(obj, fidNumber, (jfloat)limits.lineWidthGranularity);
+
+    fidNumber = env->GetFieldID(limitsClazz, "strictLines", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)limits.strictLines);
+
+    fidNumber = env->GetFieldID(limitsClazz, "standardSampleLocations", "Z");
+    env->SetBooleanField(obj, fidNumber, (jboolean)limits.standardSampleLocations);
+
+    fidNumber = env->GetFieldID(limitsClazz, "optimalBufferCopyOffsetAlignment", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.optimalBufferCopyOffsetAlignment);
+
+    fidNumber = env->GetFieldID(limitsClazz, "optimalBufferCopyRowPitchAlignment", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.optimalBufferCopyRowPitchAlignment);
+
+    fidNumber = env->GetFieldID(limitsClazz, "nonCoherentAtomSize", "J");
+    env->SetLongField(obj, fidNumber, (jlong)limits.nonCoherentAtomSize);
 }
 
 /**

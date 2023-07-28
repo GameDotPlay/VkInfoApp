@@ -476,20 +476,196 @@ void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, const VkPhysicalD
 {
     jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceSparseProperties");
 
-    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "residencyStandard2DBlockShape", "Z");
-    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyStandard2DBlockShape);
+    jfieldID fieldId = env->GetFieldID(propertiesClazz, "residencyStandard2DBlockShape", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)properties.residencyStandard2DBlockShape);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "residencyStandard2DMultisampleBlockShape", "Z");
-    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyStandard2DMultisampleBlockShape);
+    fieldId = env->GetFieldID(propertiesClazz, "residencyStandard2DMultisampleBlockShape", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)properties.residencyStandard2DMultisampleBlockShape);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "residencyStandard3DBlockShape", "Z");
-    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyStandard3DBlockShape);
+    fieldId = env->GetFieldID(propertiesClazz, "residencyStandard3DBlockShape", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)properties.residencyStandard3DBlockShape);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "residencyAlignedMipSize", "Z");
-    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyAlignedMipSize);
+    fieldId = env->GetFieldID(propertiesClazz, "residencyAlignedMipSize", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)properties.residencyAlignedMipSize);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "residencyNonResidentStrict", "Z");
-    env->SetBooleanField(obj, fidNumber, (jboolean)properties.residencyNonResidentStrict);
+    fieldId = env->GetFieldID(propertiesClazz, "residencyNonResidentStrict", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)properties.residencyNonResidentStrict);
+}
+
+/**
+ * Populates the fields of the <code>PhysicalDeviceFeatures</code> Java object.
+ * @param env The JNI environment.
+ * @param properties The <code>VkPhysicalDeviceFeatures</code> that contains the properties.
+ * @param obj (OUT param) The <code>PhysicalDeviceFeatures</code> Java object to populate.
+ */
+void populatePhysicalDeviceFeaturesObject(JNIEnv* env, const VkPhysicalDeviceFeatures features, jobject obj)
+{
+    jclass featuresClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceFeatures");
+
+    jfieldID fieldId = env->GetFieldID(featuresClazz, "robustBufferAccess", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.robustBufferAccess);
+
+    fieldId = env->GetFieldID(featuresClazz, "fullDrawIndexUint32", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.fullDrawIndexUint32);
+
+    fieldId = env->GetFieldID(featuresClazz, "imageCubeArray", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.imageCubeArray);
+
+    fieldId = env->GetFieldID(featuresClazz, "independentBlend", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.independentBlend);
+
+    fieldId = env->GetFieldID(featuresClazz, "geometryShader", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.geometryShader);
+
+    fieldId = env->GetFieldID(featuresClazz, "tessellationShader", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.tessellationShader);
+
+    fieldId = env->GetFieldID(featuresClazz, "sampleRateShading", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sampleRateShading);
+
+    fieldId = env->GetFieldID(featuresClazz, "dualSrcBlend", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.dualSrcBlend);
+
+    fieldId = env->GetFieldID(featuresClazz, "logicOp", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.logicOp);
+
+    fieldId = env->GetFieldID(featuresClazz, "multiDrawIndirect", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.multiDrawIndirect);
+
+    fieldId = env->GetFieldID(featuresClazz, "drawIndirectFirstInstance", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.drawIndirectFirstInstance);
+
+    fieldId = env->GetFieldID(featuresClazz, "depthClamp", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.depthClamp);
+
+    fieldId = env->GetFieldID(featuresClazz, "depthBiasClamp", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.depthBiasClamp);
+
+    fieldId = env->GetFieldID(featuresClazz, "fillModeNonSolid", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.fillModeNonSolid);
+
+    fieldId = env->GetFieldID(featuresClazz, "depthBounds", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.depthBounds);
+
+    fieldId = env->GetFieldID(featuresClazz, "wideLines", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.wideLines);
+
+    fieldId = env->GetFieldID(featuresClazz, "largePoints", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.largePoints);
+
+    fieldId = env->GetFieldID(featuresClazz, "alphaToOne", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.alphaToOne);
+
+    fieldId = env->GetFieldID(featuresClazz, "multiViewport", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.multiViewport);
+
+    fieldId = env->GetFieldID(featuresClazz, "samplerAnisotropy", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.samplerAnisotropy);
+
+    fieldId = env->GetFieldID(featuresClazz, "textureCompressionETC2", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.textureCompressionETC2);
+
+    fieldId = env->GetFieldID(featuresClazz, "textureCompressionASTC_LDR", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.textureCompressionASTC_LDR);
+
+    fieldId = env->GetFieldID(featuresClazz, "textureCompressionBC", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.textureCompressionBC);
+
+    fieldId = env->GetFieldID(featuresClazz, "occlusionQueryPrecise", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.occlusionQueryPrecise);
+
+    fieldId = env->GetFieldID(featuresClazz, "pipelineStatisticsQuery", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.pipelineStatisticsQuery);
+
+    fieldId = env->GetFieldID(featuresClazz, "vertexPipelineStoresAndAtomics", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.robustBufferAccess);
+
+    fieldId = env->GetFieldID(featuresClazz, "fragmentStoresAndAtomics", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.fragmentStoresAndAtomics);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderTessellationAndGeometryPointSize", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderTessellationAndGeometryPointSize);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderImageGatherExtended", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderImageGatherExtended);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderStorageImageExtendedFormats", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderStorageImageExtendedFormats);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderStorageImageMultisample", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderStorageImageMultisample);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderStorageImageReadWithoutFormat", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderStorageImageReadWithoutFormat);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderStorageImageWriteWithoutFormat", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderStorageImageWriteWithoutFormat);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderUniformBufferArrayDynamicIndexing", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderUniformBufferArrayDynamicIndexing);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderSampledImageArrayDynamicIndexing", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderSampledImageArrayDynamicIndexing);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderStorageBufferArrayDynamicIndexing", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderStorageBufferArrayDynamicIndexing);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderStorageImageArrayDynamicIndexing", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderStorageImageArrayDynamicIndexing);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderClipDistance", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderClipDistance);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderCullDistance", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderCullDistance);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderFloat64", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderFloat64);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderInt64", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderInt64);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderInt16", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderInt16);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderResourceResidency", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderResourceResidency);
+
+    fieldId = env->GetFieldID(featuresClazz, "shaderResourceMinLod", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.shaderResourceMinLod);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseBinding", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseBinding);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidencyBuffer", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidencyBuffer);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidencyImage2D", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidencyImage2D);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidencyImage3D", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidencyImage3D);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidency2Samples", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidency2Samples);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidency4Samples", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidency4Samples);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidency8Samples", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidency8Samples);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidency16Samples", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidency16Samples);
+
+    fieldId = env->GetFieldID(featuresClazz, "sparseResidencyAliased", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.sparseResidencyAliased);
+
+    fieldId = env->GetFieldID(featuresClazz, "variableMultisampleRate", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.variableMultisampleRate);
+
+    fieldId = env->GetFieldID(featuresClazz, "inheritedQueries", "Z");
+    env->SetBooleanField(obj, fieldId, (jboolean)features.inheritedQueries);
 }
 
 extern "C"
@@ -502,11 +678,13 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     const std::string PhysicalDevicePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceProperties";
     const std::string PhysicalDeviceLimitsClassName = "com/example/vulkaninfoapp/PhysicalDeviceLimits";
     const std::string PhysicalDeviceSparsePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties";
+    const std::string PhysicalDeviceFeaturesClassName = "com/example/vulkaninfoapp/PhysicalDeviceFeatures";
 
     const std::string InstanceInfoClassSignature = "Lcom/example/vulkaninfoapp/InstanceInfo;";
     const std::string PhysicalDevicePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
     const std::string PhysicalDeviceLimitsClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceLimits;";
     const std::string PhysicalDeviceSparsePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
+    const std::string PhysicalDeviceFeaturesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceFeatures;";
 
     VkInfo vkInfo;
     vkInfo.instance = new Instance(env->GetStringUTFChars(app_name, nullptr), env->GetStringUTFChars(engine_name, nullptr), {}, {});
@@ -547,6 +725,13 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     populatePhysicalDevicePropertiesObject(env, vkInfo.physicalDeviceProperties, physicalDevicePropertiesObject);
     fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceProperties", PhysicalDevicePropertiesClassSignature.c_str());
     env->SetObjectField(vkInfoObject, fieldId, physicalDevicePropertiesObject);
+
+    // Populate the physicalDeviceFeatures field of the Java VkInfo object.
+    vkInfo.physicalDeviceFeatures = PhysicalDevice::getDeviceFeatures(vkInfo.selectedPhysicalDevice);
+    jobject physicalDeviceFeaturesObject = getObject(env, PhysicalDeviceFeaturesClassName.c_str());
+    populatePhysicalDeviceFeaturesObject(env, vkInfo.physicalDeviceFeatures, physicalDeviceFeaturesObject);
+    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceFeatures", PhysicalDeviceFeaturesClassSignature.c_str());
+    env->SetObjectField(vkInfoObject, fieldId, physicalDeviceFeaturesObject);
 
     delete vkInfo.instance;
     return vkInfoObject;

@@ -7,7 +7,6 @@
 
 namespace PhysicalDevice
 {
-    //std::string deviceTypes[] = {"Other", "Integrated", "Discrete", "Virtual", "CPU"};
     VkPhysicalDeviceProperties getDeviceProperties(VkPhysicalDevice device);
     VkPhysicalDeviceFeatures getDeviceFeatures(VkPhysicalDevice device);
     VkPhysicalDeviceMemoryProperties getMemoryProperties(VkPhysicalDevice device);

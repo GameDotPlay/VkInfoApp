@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case "Physical Device Features":
+                    populatePhysicalDeviceFeautures(vkInfo.physicalDeviceFeatures);
                     break;
 
                 case "Physical Device Memory Properties":
@@ -112,6 +113,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             mobileCollection.put(group, childList);
+        }
+    }
+
+    private void populateInstanceInfo(InstanceInfo instanceInfo) {
+        childList = new ArrayList<Pair<String, String>>();
+        if (instanceInfo != null) {
+            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.appName.ordinal()], instanceInfo.appName));
+            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.engineName.ordinal()], instanceInfo.engineName));
+            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.numDevices.ordinal()], String.valueOf(instanceInfo.numDevices)));
         }
     }
 
@@ -245,23 +255,75 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void populatePhysicalDeviceSparseProperties(PhysicalDeviceSparseProperties sparseProperties) {
+    private void populatePhysicalDeviceSparseProperties(PhysicalDeviceSparseProperties properties) {
         childList = new ArrayList<Pair<String, String>>();
-        if (sparseProperties != null) {
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard2DBlockShape)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DMultisampleBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard2DMultisampleBlockShape)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard3DBlockShape.ordinal()], String.valueOf(sparseProperties.residencyStandard3DBlockShape)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyAlignedMipSize.ordinal()], String.valueOf(sparseProperties.residencyAlignedMipSize)));
-            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyNonResidentScrict.ordinal()], String.valueOf(sparseProperties.residencyNonResidentStrict)));
+        if (properties != null) {
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DBlockShape.ordinal()], String.valueOf(properties.residencyStandard2DBlockShape)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard2DMultisampleBlockShape.ordinal()], String.valueOf(properties.residencyStandard2DMultisampleBlockShape)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyStandard3DBlockShape.ordinal()], String.valueOf(properties.residencyStandard3DBlockShape)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyAlignedMipSize.ordinal()], String.valueOf(properties.residencyAlignedMipSize)));
+            childList.add(new Pair(PhysicalDeviceProperties.PhysicalDeviceSparsePropertyNames[PhysicalDeviceSparsePropertyIndices.ResidencyNonResidentScrict.ordinal()], String.valueOf(properties.residencyNonResidentStrict)));
         }
     }
 
-    private void populateInstanceInfo(InstanceInfo instanceInfo) {
+    private void populatePhysicalDeviceFeautures(PhysicalDeviceFeatures features) {
         childList = new ArrayList<Pair<String, String>>();
-        if (instanceInfo != null) {
-            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.appName.ordinal()], instanceInfo.appName));
-            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.engineName.ordinal()], instanceInfo.engineName));
-            childList.add(new Pair(InstanceInfo.InstancePropertyNames[InstancePropertyIndices.numDevices.ordinal()], String.valueOf(instanceInfo.numDevices)));
+        if (features != null) {
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.RobustBufferAccess.ordinal()], String.valueOf(features.robustBufferAccess)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.FullDrawIndexUint32.ordinal()], String.valueOf(features.fullDrawIndexUint32)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ImageCubeArray.ordinal()], String.valueOf(features.imageCubeArray)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.IndependentBlend.ordinal()], String.valueOf(features.independentBlend)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.GeometryShader.ordinal()], String.valueOf(features.geometryShader)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.TessellationShader.ordinal()], String.valueOf(features.tessellationShader)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SampleRateShading.ordinal()], String.valueOf(features.sampleRateShading)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.DualSrcBlend.ordinal()], String.valueOf(features.dualSrcBlend)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.LogicOp.ordinal()], String.valueOf(features.logicOp)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.MultiDrawIndirect.ordinal()], String.valueOf(features.multiDrawIndirect)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.DrawIndirectFirstInstance.ordinal()], String.valueOf(features.drawIndirectFirstInstance)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.DepthClamp.ordinal()], String.valueOf(features.depthClamp)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.DepthBiasClamp.ordinal()], String.valueOf(features.depthBiasClamp)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.FillModeNonSolid.ordinal()], String.valueOf(features.fillModeNonSolid)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.DepthBounds.ordinal()], String.valueOf(features.depthBounds)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.WideLines.ordinal()], String.valueOf(features.wideLines)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.LargePoints.ordinal()], String.valueOf(features.largePoints)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.AlphaToOne.ordinal()], String.valueOf(features.alphaToOne)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.MultiViewport.ordinal()], String.valueOf(features.multiViewport)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SamplerAnisotropy.ordinal()], String.valueOf(features.samplerAnisotropy)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.TextureCompressionETC2.ordinal()], String.valueOf(features.textureCompressionETC2)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.TextureCompressionASTC_LDR.ordinal()], String.valueOf(features.textureCompressionASTC_LDR)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.TextureCompressionBC.ordinal()], String.valueOf(features.textureCompressionBC)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.OcclusionQueryPrecise.ordinal()], String.valueOf(features.occlusionQueryPrecise)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.PipelineStatisticsQuery.ordinal()], String.valueOf(features.pipelineStatisticsQuery)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.VertexPipelineStoresAndAtomics.ordinal()], String.valueOf(features.vertexPipelineStoresAndAtomics)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.FragmentStoresAndAtomics.ordinal()], String.valueOf(features.fragmentStoresAndAtomics)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderTessellationAndGeometryPointSize.ordinal()], String.valueOf(features.shaderTessellationAndGeometryPointSize)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderImageGatherExtended.ordinal()], String.valueOf(features.shaderImageGatherExtended)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderStorageImageExtendedFormats.ordinal()], String.valueOf(features.shaderStorageImageExtendedFormats)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderStorageImageMultisample.ordinal()], String.valueOf(features.shaderStorageImageMultisample)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderStorageImageReadWithoutFormat.ordinal()], String.valueOf(features.shaderStorageImageReadWithoutFormat)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderStorageImageWriteWithoutFormat.ordinal()], String.valueOf(features.shaderStorageImageWriteWithoutFormat)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderUniformBufferArrayDynamicIndexing.ordinal()], String.valueOf(features.shaderUniformBufferArrayDynamicIndexing)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderSampledImageArrayDynamicIndexing.ordinal()], String.valueOf(features.shaderSampledImageArrayDynamicIndexing)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderStorageBufferArrayDynamicIndexing.ordinal()], String.valueOf(features.shaderStorageBufferArrayDynamicIndexing)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderStorageImageArrayDynamicIndexing.ordinal()], String.valueOf(features.shaderStorageImageArrayDynamicIndexing)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderClipDistance.ordinal()], String.valueOf(features.shaderClipDistance)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderCullDistance.ordinal()], String.valueOf(features.shaderCullDistance)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderFloat64.ordinal()], String.valueOf(features.shaderFloat64)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderInt64.ordinal()], String.valueOf(features.shaderInt64)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderInt16.ordinal()], String.valueOf(features.shaderInt16)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderResourceResidency.ordinal()], String.valueOf(features.shaderResourceResidency)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.ShaderResourceMinLod.ordinal()], String.valueOf(features.shaderResourceMinLod)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseBinding.ordinal()], String.valueOf(features.sparseBinding)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidencyBuffer.ordinal()], String.valueOf(features.sparseResidencyBuffer)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidencyImage2D.ordinal()], String.valueOf(features.sparseResidencyImage2D)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidencyImage3D.ordinal()], String.valueOf(features.sparseResidencyImage3D)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidency2Samples.ordinal()], String.valueOf(features.sparseResidency2Samples)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidency4Samples.ordinal()], String.valueOf(features.sparseResidency4Samples)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidency8Samples.ordinal()], String.valueOf(features.sparseResidency8Samples)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidency16Samples.ordinal()], String.valueOf(features.sparseResidency16Samples)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.SparseResidencyAliased.ordinal()], String.valueOf(features.sparseResidencyAliased)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.VariableMultisampleRate.ordinal()], String.valueOf(features.variableMultisampleRate)));
+            childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.InheritedQueries.ordinal()], String.valueOf(features.inheritedQueries)));
         }
     }
     

@@ -4,4 +4,6 @@ public class VkInfo {
 
     public InstanceInfo instanceInfo;
     public PhysicalDeviceProperties physicalDeviceProperties;
+
+    public PhysicalDeviceFeatures physicalDeviceFeatures;
 }

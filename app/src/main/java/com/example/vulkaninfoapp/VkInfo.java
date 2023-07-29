@@ -6,4 +6,6 @@ public class VkInfo {
     public PhysicalDeviceProperties physicalDeviceProperties;
 
     public PhysicalDeviceFeatures physicalDeviceFeatures;
+
+    public PhysicalDeviceMemoryProperties physicalDeviceMemoryProperties;
 }

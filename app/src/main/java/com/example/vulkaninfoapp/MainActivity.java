@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         groupList.add("Physical Device Sparse Properties");
         groupList.add("Physical Device Features");
         groupList.add("Physical Device Memory Properties");
-        groupList.add("Physical Device Memory Heap Properties");
-        groupList.add("Physical Device Queue Family Properties");
+        groupList.add("Physical Device Memory Types");
+        groupList.add("Physical Device Memory Heaps");
     }
 
     private void createCollection() {
@@ -97,16 +97,19 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case "Physical Device Features":
-                    populatePhysicalDeviceFeautures(vkInfo.physicalDeviceFeatures);
+                    populatePhysicalDeviceFeatures(vkInfo.physicalDeviceFeatures);
                     break;
 
                 case "Physical Device Memory Properties":
+                    populatePhysicalDeviceMemoryProperties(vkInfo.physicalDeviceMemoryProperties);
                     break;
 
-                case "Physical Device Heap Properties":
+                case "Physical Device Memory Types":
+                    populatePhysicalDeviceMemoryTypes(vkInfo.physicalDeviceMemoryProperties.memoryTypes);
                     break;
 
-                case "Physical Device Queue Family Properties":
+                case "Physical Device Memory Heaps":
+                    populatePhysicalDeviceMemoryHeaps(vkInfo.physicalDeviceMemoryProperties.memoryHeaps);
                     break;
 
                 default:
@@ -266,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void populatePhysicalDeviceFeautures(PhysicalDeviceFeatures features) {
+    private void populatePhysicalDeviceFeatures(PhysicalDeviceFeatures features) {
         childList = new ArrayList<Pair<String, String>>();
         if (features != null) {
             childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.RobustBufferAccess.ordinal()], String.valueOf(features.robustBufferAccess)));
@@ -325,6 +328,27 @@ public class MainActivity extends AppCompatActivity {
             childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.VariableMultisampleRate.ordinal()], String.valueOf(features.variableMultisampleRate)));
             childList.add(new Pair(PhysicalDeviceFeatures.PhysicalDeviceFeatureNames[PhysicalDeviceFeaturesIndices.InheritedQueries.ordinal()], String.valueOf(features.inheritedQueries)));
         }
+    }
+
+    private void populatePhysicalDeviceMemoryProperties(PhysicalDeviceMemoryProperties properties) {
+        childList = new ArrayList<Pair<String, String>>();
+        if (properties != null) {
+            childList.add(new Pair(PhysicalDeviceMemoryProperties.PhysicalDeviceMemoryPropertyNames[PhysicalDeviceMemoryPropertyIndices.MemoryTypeCount.ordinal()], String.valueOf(properties.memoryTypeCount)));
+            childList.add(new Pair(PhysicalDeviceMemoryProperties.PhysicalDeviceMemoryPropertyNames[PhysicalDeviceMemoryPropertyIndices.MemoryHeapCount.ordinal()], String.valueOf(properties.memoryHeapCount)));
+        }
+    }
+
+    private void populatePhysicalDeviceMemoryTypes(MemoryType[] memoryTypes){
+        childList = new ArrayList<Pair<String, String>>();
+        if (memoryTypes != null && memoryTypes.length > 0) {
+            for (MemoryType memoryType : memoryTypes) {
+                childList.add(new Pair("", ""));
+            }
+        }
+    }
+
+    private void populatePhysicalDeviceMemoryHeaps(MemoryHeap[] memoryHeaps) {
+
     }
     
     private native static VkInfo getVkInfo(String appName, String engineName);

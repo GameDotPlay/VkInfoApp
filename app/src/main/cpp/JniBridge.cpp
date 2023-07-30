@@ -33,6 +33,50 @@ std::string asHexString(const uint32_t value)
     return ss.str();
 }
 
+std::vector<const char*> parseMemTypePropertyFlags(VkMemoryPropertyFlags flags)
+{
+    std::vector<const char*> flagStrings;
+
+    if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+    {
+        flagStrings.push_back("Device Local");
+    }
+    if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+    {
+        flagStrings.push_back("Host Visible");
+    }
+    if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+    {
+        flagStrings.push_back("Host Coherent");
+    }
+    if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
+    {
+        flagStrings.push_back("Host Cached");
+    }
+    if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
+    {
+        flagStrings.push_back("Lazily Allocated");
+    }
+    if (flags & VK_MEMORY_PROPERTY_PROTECTED_BIT)
+    {
+        flagStrings.push_back("Protected");
+    }
+    if (flags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD)
+    {
+        flagStrings.push_back("Device Coherent AMD");
+    }
+    if (flags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD)
+    {
+        flagStrings.push_back("Device Uncached AMD");
+    }
+    if (flags & VK_MEMORY_PROPERTY_RDMA_CAPABLE_BIT_NV)
+    {
+        flagStrings.push_back("RDMA Capable");
+    }
+
+    return flagStrings;
+}
+
 /**
  * Gets a Java object instance based on the parameters provided.
  * @param env The JNI environment.
@@ -687,7 +731,21 @@ void populatePhysicalDeviceMemoryPropertiesObject(JNIEnv* env, const VkPhysicalD
 
 void populateMemoryTypeObject(JNIEnv* env, const VkMemoryType memoryType, jobject obj)
 {
+    jclass memTypeClass = env->FindClass("com/example/vulkaninfoapp/MemoryType");
 
+    jfieldID fieldId = env->GetFieldID(memTypeClass, "heapIndex", "J");
+    env->SetLongField(obj, fieldId, (jlong)memoryType.heapIndex);
+
+    std::vector<const char*> flagStrings = parseMemTypePropertyFlags(memoryType.propertyFlags);
+    jclass stringClass = env->FindClass("java/lang/String");
+    jobjectArray javaOutStrings = env->NewObjectArray(flagStrings.size(), stringClass, NULL);
+    for (size_t i = 0; i < flagStrings.size(); i++)
+    {
+        env->SetObjectArrayElement(javaOutStrings, i, env->NewStringUTF(flagStrings[i]));
+    }
+
+    fieldId = env->GetFieldID(memTypeClass, "propertyFlags", "[Ljava/lang/String;");
+    env->SetObjectField(obj, fieldId, javaOutStrings);
 }
 
 void populateMemoryHeapObject(JNIEnv* env, const VkMemoryHeap memoryHeap, jobject obj)
@@ -769,17 +827,23 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     vkInfo.physicalDeviceMemoryProperties = PhysicalDevice::getMemoryProperties(vkInfo.selectedPhysicalDevice);
     jobject physicalDeviceMemoryPropertiesObject = getObject(env, PhysicalDeviceMemoryPropertiesClassName.c_str());
     populatePhysicalDeviceMemoryPropertiesObject(env, vkInfo.physicalDeviceMemoryProperties, physicalDeviceMemoryPropertiesObject);
-    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceMemoryProperties", PhysicalDeviceMemoryPropertiesClassSignature.c_str());
-    env->SetObjectField(vkInfoObject, fieldId, physicalDeviceMemoryPropertiesObject);
 
     // Populate the MemoryType Java objects.
     jclass memoryTypeClass = env->FindClass(MemoryTypeClassName.c_str());
     jobjectArray memoryTypeObjArray = env->NewObjectArray(vkInfo.physicalDeviceMemoryProperties.memoryTypeCount, memoryTypeClass, nullptr);
     for (size_t i = 0; i < vkInfo.physicalDeviceMemoryProperties.memoryTypeCount; i++)
     {
-        populateMemoryTypeObject(env, vkInfo.physicalDeviceMemoryProperties.memoryTypes[i], &memoryTypeObjArray[i]);
+        jobject memTypeObj = getObject(env, MemoryTypeClassName.c_str());
+        populateMemoryTypeObject(env, vkInfo.physicalDeviceMemoryProperties.memoryTypes[i], memTypeObj);
+        env->SetObjectArrayElement(memoryTypeObjArray, i, memTypeObj);
     }
 
+    std::string arraySig = "[" + MemoryTypeClassSignature;
+    fieldId = env->GetFieldID(env->FindClass(PhysicalDeviceMemoryPropertiesClassName.c_str()), "memoryTypes", arraySig.c_str());
+    env->SetObjectField(physicalDeviceMemoryPropertiesObject, fieldId, memoryTypeObjArray);
+
+    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceMemoryProperties", PhysicalDeviceMemoryPropertiesClassSignature.c_str());
+    env->SetObjectField(vkInfoObject, fieldId, physicalDeviceMemoryPropertiesObject);
 
     delete vkInfo.instance;
     return vkInfoObject;

@@ -3,6 +3,7 @@ package com.example.vulkaninfoapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
@@ -342,13 +343,28 @@ public class MainActivity extends AppCompatActivity {
         childList = new ArrayList<Pair<String, String>>();
         if (memoryTypes != null && memoryTypes.length > 0) {
             for (MemoryType memoryType : memoryTypes) {
-                childList.add(new Pair("", ""));
+                String display = "";
+                for (String flag : memoryType.propertyFlags) {
+                    display += flag;
+                    display += "\n";
+                }
+                childList.add(new Pair("Heap index: " + String.valueOf(memoryType.heapIndex), display));
             }
         }
     }
 
     private void populatePhysicalDeviceMemoryHeaps(MemoryHeap[] memoryHeaps) {
-
+        childList = new ArrayList<Pair<String, String>>();
+        if (memoryHeaps != null && memoryHeaps.length > 0) {
+            for (MemoryHeap memoryHeap : memoryHeaps) {
+                String display = "";
+                for (String flag : memoryHeap.heapFlags) {
+                    display += flag;
+                    display += "\n";
+                }
+                childList.add(new Pair("Size: " + String.valueOf(memoryHeap.size), display));
+            }
+        }
     }
     
     private native static VkInfo getVkInfo(String appName, String engineName);

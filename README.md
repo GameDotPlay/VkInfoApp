@@ -29,5 +29,20 @@ Some of the VkPhysicalDeviceLimits:
 
 The VkPhysicalDeviceSparseProperties:
 
-![Info about the Vulkan Instance](docs/screenshots/PhysicalDeviceSparseProperties.jpg "The VkPhysicalDeviceProperties.VkPhysicalDeviceSparseProperties")
+![The VkPhysicalDeviceProperties.VkPhysicalDeviceSparseProperties](docs/screenshots/PhysicalDeviceSparseProperties.jpg "The VkPhysicalDeviceProperties.VkPhysicalDeviceSparseProperties")
 
+The VkPhysicalDeviceFeatures:
+
+![The VkPhysicalDeviceProperties.VkPhysicalDeviceFeatures](docs/screenshots/PhysicalDeviceFeatures.jpg "The VkPhysicalDeviceProperties.VkPhysicalDeviceFeatures")
+
+The VkPhysicalDeviceMemoryProperties:
+
+![The VkPhysicalDeviceMemoryProperties](docs/screenshots/PhysicalDeviceMemoryProperties.jpg "The VkPhysicalDeviceMemoryProperties")
+
+The VkPhysicalDeviceMemoryProperties.VkMemoryTypes:
+
+![The VkPhysicalDeviceMemoryProperties.VkMemoryTypes](docs/screenshots/PhysicalDeviceMemoryTypes.jpg "The VkPhysicalDeviceMemoryProperties.VkMemoryTypes")
+
+The VkPhysicalDeviceMemoryProperties.VkMemoryHeaps:
+
+![The VkPhysicalDeviceMemoryProperties.VkMemoryHeaps](docs/screenshots/PhysicalDeviceMemoryHeaps.jpg "The VkPhysicalDeviceMemoryProperties.VkMemoryHeaps")

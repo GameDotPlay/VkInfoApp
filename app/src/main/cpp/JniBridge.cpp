@@ -6,6 +6,22 @@
 #include <sstream>
 
 /**
+ * Text descriptions of the <code>VkMemoryPropertyFlagBits</code> enum.
+ */
+const char* MemoryPropertyFlagDescriptions[] =
+        {
+        "Device Local",
+        "Host Visible",
+        "Host Coherent",
+        "Host Cached",
+        "Lazily Allocated",
+        "Protected",
+        "Device Coherent AMD",
+        "Device Uncached AMD",
+        "RDMA Capable"
+        };
+
+/**
  * Parse the apiVersion as a string in the format of Variant.Major.Minor.Patch.
  * @param apiVersion The apiVersion from <code>VkPhysicalDeviceProperties</code>.
  * @return the apiVersion as a string in the format of Variant.Major.Minor.Patch.
@@ -33,45 +49,50 @@ std::string asHexString(const uint32_t value)
     return ss.str();
 }
 
+/**
+ * Creates a vector of strings enumerating the <code>VkMemoryPropertyFlags</code>.
+ * @param flags The flags to parse.
+ * @return the vector of strings that contains the descriptions of the active flags in <code>flags</code>.
+ */
 std::vector<const char*> parseMemTypePropertyFlags(VkMemoryPropertyFlags flags)
 {
     std::vector<const char*> flagStrings;
 
     if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
     {
-        flagStrings.push_back("Device Local");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[0]);
     }
     if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
-        flagStrings.push_back("Host Visible");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[1]);
     }
     if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
     {
-        flagStrings.push_back("Host Coherent");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[2]);
     }
     if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
     {
-        flagStrings.push_back("Host Cached");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[3]);
     }
     if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
     {
-        flagStrings.push_back("Lazily Allocated");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[4]);
     }
     if (flags & VK_MEMORY_PROPERTY_PROTECTED_BIT)
     {
-        flagStrings.push_back("Protected");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[5]);
     }
     if (flags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD)
     {
-        flagStrings.push_back("Device Coherent AMD");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[6]);
     }
     if (flags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD)
     {
-        flagStrings.push_back("Device Uncached AMD");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[7]);
     }
     if (flags & VK_MEMORY_PROPERTY_RDMA_CAPABLE_BIT_NV)
     {
-        flagStrings.push_back("RDMA Capable");
+        flagStrings.push_back(MemoryPropertyFlagDescriptions[8]);
     }
 
     return flagStrings;

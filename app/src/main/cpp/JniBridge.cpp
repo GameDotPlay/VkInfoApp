@@ -22,6 +22,15 @@ const char* MemoryPropertyFlagDescriptions[] =
         };
 
 /**
+ * Text descriptions of the <code>VkMemoryHeapFlagBits</code> enum.
+ */
+const char* MemoryHeapFlagDescriptions[] =
+        {
+        "Device Local",
+        "Multi-Instance"
+        };
+
+/**
  * Parse the apiVersion as a string in the format of Variant.Major.Minor.Patch.
  * @param apiVersion The apiVersion from <code>VkPhysicalDeviceProperties</code>.
  * @return the apiVersion as a string in the format of Variant.Major.Minor.Patch.
@@ -93,6 +102,27 @@ std::vector<const char*> parseMemTypePropertyFlags(VkMemoryPropertyFlags flags)
     if (flags & VK_MEMORY_PROPERTY_RDMA_CAPABLE_BIT_NV)
     {
         flagStrings.push_back(MemoryPropertyFlagDescriptions[8]);
+    }
+
+    return flagStrings;
+}
+
+/**
+ * Creates a vector of string enumerating the <code>VkMemoryHeapFlags</code>.
+ * @param flags The flags to parse.
+ * @return the vector of strings that contains the descriptions of the active flags in <code>flags</code>.
+ */
+std::vector<const char*> parseMemHeapFlags(VkMemoryHeapFlags flags)
+{
+    std::vector<const char*> flagStrings;
+
+    if (flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+    {
+        flagStrings.push_back(MemoryHeapFlagDescriptions[0]);
+    }
+    if (flags & VK_MEMORY_HEAP_MULTI_INSTANCE_BIT)
+    {
+        flagStrings.push_back(MemoryHeapFlagDescriptions[1]);
     }
 
     return flagStrings;
@@ -750,6 +780,12 @@ void populatePhysicalDeviceMemoryPropertiesObject(JNIEnv* env, const VkPhysicalD
     env->SetLongField(obj, fidNumber, (jlong)properties.memoryHeapCount);
 }
 
+/**
+ * Populates the field of the <code>MemoryType</code> Java object.
+ * @param env The JNI environment.
+ * @param memoryType The <code>VkMemoryType</code> that contains the memory properties.
+ * @param obj (OUT param) The <code>MemoryType</code> Java object to populate.
+ */
 void populateMemoryTypeObject(JNIEnv* env, const VkMemoryType memoryType, jobject obj)
 {
     jclass memTypeClass = env->FindClass("com/example/vulkaninfoapp/MemoryType");
@@ -769,9 +805,29 @@ void populateMemoryTypeObject(JNIEnv* env, const VkMemoryType memoryType, jobjec
     env->SetObjectField(obj, fieldId, javaOutStrings);
 }
 
+/**
+ * Populates the field of the <code>MemoryHeap</code> Java object.
+ * @param env The JNI environment.
+ * @param memoryHeap The <code>VkMemoryHeap</code> that contains the memory heap properties.
+ * @param obj (OUT param) The <code>MemoryHeap</code> Java object to populate.
+ */
 void populateMemoryHeapObject(JNIEnv* env, const VkMemoryHeap memoryHeap, jobject obj)
 {
+    jclass memHeapClass = env->FindClass("com/example/vulkaninfoapp/MemoryHeap");
 
+    jfieldID fieldId = env->GetFieldID(memHeapClass, "size", "J");
+    env->SetLongField(obj, fieldId, (jlong)memoryHeap.size);
+
+    std::vector<const char*> flagStrings = parseMemHeapFlags(memoryHeap.flags);
+    jclass stringClass = env->FindClass("java/lang/String");
+    jobjectArray javaOutStrings = env->NewObjectArray(flagStrings.size(), stringClass, NULL);
+    for (size_t i = 0; i < flagStrings.size(); i++)
+    {
+        env->SetObjectArrayElement(javaOutStrings, i, env->NewStringUTF(flagStrings[i]));
+    }
+
+    fieldId = env->GetFieldID(memHeapClass, "heapFlags", "[Ljava/lang/String;");
+    env->SetObjectField(obj, fieldId, javaOutStrings);
 }
 
 extern "C"
@@ -862,6 +918,21 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
     std::string arraySig = "[" + MemoryTypeClassSignature;
     fieldId = env->GetFieldID(env->FindClass(PhysicalDeviceMemoryPropertiesClassName.c_str()), "memoryTypes", arraySig.c_str());
     env->SetObjectField(physicalDeviceMemoryPropertiesObject, fieldId, memoryTypeObjArray);
+
+    // Populate the MemoryHeap Java objects.
+    jclass memoryHeapClass = env->FindClass(MemoryHeapClassName.c_str());
+    jobjectArray memoryHeapObjArray = env->NewObjectArray(vkInfo.physicalDeviceMemoryProperties.memoryHeapCount, memoryHeapClass, nullptr);
+    for (size_t i = 0; i < vkInfo.physicalDeviceMemoryProperties.memoryHeapCount; i++)
+    {
+        jobject memHeapObj = getObject(env, MemoryHeapClassName.c_str());
+        populateMemoryHeapObject(env, vkInfo.physicalDeviceMemoryProperties.memoryHeaps[i], memHeapObj);
+        env->SetObjectArrayElement(memoryHeapObjArray, i, memHeapObj);
+    }
+
+    arraySig.clear();
+    arraySig = "[" + MemoryHeapClassSignature;
+    fieldId = env->GetFieldID(env->FindClass(PhysicalDeviceMemoryPropertiesClassName.c_str()), "memoryHeaps", arraySig.c_str());
+    env->SetObjectField(physicalDeviceMemoryPropertiesObject, fieldId, memoryHeapObjArray);
 
     fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceMemoryProperties", PhysicalDeviceMemoryPropertiesClassSignature.c_str());
     env->SetObjectField(vkInfoObject, fieldId, physicalDeviceMemoryPropertiesObject);

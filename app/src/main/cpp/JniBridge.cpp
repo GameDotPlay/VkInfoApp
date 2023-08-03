@@ -5,6 +5,30 @@
 #include <string>
 #include <sstream>
 
+namespace JavaClasses
+{
+    const char* const JavaStringClassName = "java/lang/String";
+    const char* const VkInfoClassName = "com/example/vulkaninfoapp/VkInfo";
+    const char* const InstanceInfoClassName = "com/example/vulkaninfoapp/InstanceInfo";
+    const char* const PhysicalDevicePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceProperties";
+    const char* const PhysicalDeviceLimitsClassName = "com/example/vulkaninfoapp/PhysicalDeviceLimits";
+    const char* const PhysicalDeviceSparsePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties";
+    const char* const PhysicalDeviceFeaturesClassName = "com/example/vulkaninfoapp/PhysicalDeviceFeatures";
+    const char* const PhysicalDeviceMemoryPropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceMemoryProperties";
+    const char* const MemoryTypeClassName = "com/example/vulkaninfoapp/MemoryType";
+    const char* const MemoryHeapClassName = "com/example/vulkaninfoapp/MemoryHeap";
+
+    const char* const JavaStringClassSignature = "Ljava/lang/String;";
+    const char* const InstanceInfoClassSignature = "Lcom/example/vulkaninfoapp/InstanceInfo;";
+    const char* const PhysicalDevicePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
+    const char* const PhysicalDeviceLimitsClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceLimits;";
+    const char* const PhysicalDeviceSparsePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
+    const char* const PhysicalDeviceFeaturesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceFeatures;";
+    const char* const PhysicalDeviceMemoryPropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceMemoryProperties;";
+    const char* const MemoryTypeClassSignature = "Lcom/example/vulkaninfoapp/MemoryType;";
+    const char* const MemoryHeapClassSignature = "Lcom/example/vulkaninfoapp/MemoryHeap;";
+}
+
 /**
  * Text descriptions of the <code>VkMemoryPropertyFlagBits</code> enum.
  */
@@ -166,13 +190,13 @@ jobject getObject(JNIEnv *env, const char* className, const char* constructorSig
  */
 void populateInstanceInfoObject(JNIEnv *env, const Instance* instance, jobject instanceInfoObject)
 {
-    jclass instanceInfoClass = env->FindClass("com/example/vulkaninfoapp/InstanceInfo");
+    jclass instanceInfoClass = env->FindClass(JavaClasses::InstanceInfoClassName);
 
-    jfieldID fidNumber = env->GetFieldID(instanceInfoClass, "appName", "Ljava/lang/String;");
+    jfieldID fidNumber = env->GetFieldID(instanceInfoClass, "appName", JavaClasses::JavaStringClassSignature);
     jstring appName = env->NewStringUTF(instance->getAppName().c_str());
     env->SetObjectField(instanceInfoObject, fidNumber, appName);
 
-    fidNumber = env->GetFieldID(instanceInfoClass, "engineName", "Ljava/lang/String;");
+    fidNumber = env->GetFieldID(instanceInfoClass, "engineName", JavaClasses::JavaStringClassSignature);
     jstring engineNameFromInstance = env->NewStringUTF(instance->getEngineName().c_str());
     env->SetObjectField(instanceInfoObject, fidNumber, engineNameFromInstance);
 
@@ -188,28 +212,28 @@ void populateInstanceInfoObject(JNIEnv *env, const Instance* instance, jobject i
  */
 void populatePhysicalDevicePropertiesObject(JNIEnv *env, const VkPhysicalDeviceProperties properties, jobject obj)
 {
-    jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceProperties");
+    jclass propertiesClazz = env->FindClass(JavaClasses::PhysicalDevicePropertiesClassName);
 
-    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "apiVersion", "Ljava/lang/String;");
+    jfieldID fidNumber = env->GetFieldID(propertiesClazz, "apiVersion", JavaClasses::JavaStringClassSignature);
     jstring apiVersion = env->NewStringUTF(getApiVersionAsString(properties.apiVersion).c_str());
     env->SetObjectField(obj, fidNumber, apiVersion);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "driverVersion", "Ljava/lang/String;");
+    fidNumber = env->GetFieldID(propertiesClazz, "driverVersion", JavaClasses::JavaStringClassSignature);
     jstring driverVersion = env->NewStringUTF(asHexString(properties.driverVersion).c_str());
     env->SetObjectField(obj, fidNumber, driverVersion);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "vendorId", "Ljava/lang/String;");
+    fidNumber = env->GetFieldID(propertiesClazz, "vendorId", JavaClasses::JavaStringClassSignature);
     jstring vendorId = env->NewStringUTF(asHexString(properties.vendorID).c_str());
     env->SetObjectField(obj, fidNumber, vendorId);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "deviceId", "Ljava/lang/String;");
+    fidNumber = env->GetFieldID(propertiesClazz, "deviceId", JavaClasses::JavaStringClassSignature);
     jstring deviceId = env->NewStringUTF(asHexString(properties.deviceID).c_str());
     env->SetObjectField(obj, fidNumber, deviceId);
 
     fidNumber = env->GetFieldID(propertiesClazz, "physicalDeviceType", "I");
     env->SetIntField(obj, fidNumber, (jint)properties.deviceType);
 
-    fidNumber = env->GetFieldID(propertiesClazz, "deviceName", "Ljava/lang/String;");
+    fidNumber = env->GetFieldID(propertiesClazz, "deviceName", JavaClasses::JavaStringClassSignature);
     jstring deviceName = env->NewStringUTF(properties.deviceName);
     env->SetObjectField(obj, fidNumber, deviceName);
 }
@@ -222,7 +246,7 @@ void populatePhysicalDevicePropertiesObject(JNIEnv *env, const VkPhysicalDeviceP
  */
 void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimits limits, jobject obj)
 {
-    jclass limitsClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceLimits");
+    jclass limitsClazz = env->FindClass(JavaClasses::PhysicalDeviceLimitsClassName);
 
     jfieldID fidNumber = env->GetFieldID(limitsClazz, "maxImageDimension1D", "J");
     env->SetLongField(obj, fidNumber, (jlong)limits.maxImageDimension1D);
@@ -569,7 +593,7 @@ void populatePhysicalDeviceLimitsObject(JNIEnv* env, const VkPhysicalDeviceLimit
  */
 void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, const VkPhysicalDeviceSparseProperties properties, jobject obj)
 {
-    jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceSparseProperties");
+    jclass propertiesClazz = env->FindClass(JavaClasses::PhysicalDeviceSparsePropertiesClassName);
 
     jfieldID fieldId = env->GetFieldID(propertiesClazz, "residencyStandard2DBlockShape", "Z");
     env->SetBooleanField(obj, fieldId, (jboolean)properties.residencyStandard2DBlockShape);
@@ -595,7 +619,7 @@ void populatePhysicalDeviceSparsePropertiesObject(JNIEnv* env, const VkPhysicalD
  */
 void populatePhysicalDeviceFeaturesObject(JNIEnv* env, const VkPhysicalDeviceFeatures features, jobject obj)
 {
-    jclass featuresClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceFeatures");
+    jclass featuresClazz = env->FindClass(JavaClasses::PhysicalDeviceFeaturesClassName);
 
     jfieldID fieldId = env->GetFieldID(featuresClazz, "robustBufferAccess", "Z");
     env->SetBooleanField(obj, fieldId, (jboolean)features.robustBufferAccess);
@@ -771,7 +795,7 @@ void populatePhysicalDeviceFeaturesObject(JNIEnv* env, const VkPhysicalDeviceFea
  */
 void populatePhysicalDeviceMemoryPropertiesObject(JNIEnv* env, const VkPhysicalDeviceMemoryProperties properties, jobject obj)
 {
-    jclass propertiesClazz = env->FindClass("com/example/vulkaninfoapp/PhysicalDeviceMemoryProperties");
+    jclass propertiesClazz = env->FindClass(JavaClasses::PhysicalDeviceMemoryPropertiesClassName);
 
     jfieldID fidNumber = env->GetFieldID(propertiesClazz, "memoryTypeCount", "J");
     env->SetLongField(obj, fidNumber, (jlong)properties.memoryTypeCount);
@@ -788,20 +812,21 @@ void populatePhysicalDeviceMemoryPropertiesObject(JNIEnv* env, const VkPhysicalD
  */
 void populateMemoryTypeObject(JNIEnv* env, const VkMemoryType memoryType, jobject obj)
 {
-    jclass memTypeClass = env->FindClass("com/example/vulkaninfoapp/MemoryType");
+    jclass memTypeClass = env->FindClass(JavaClasses::MemoryTypeClassName);
 
     jfieldID fieldId = env->GetFieldID(memTypeClass, "heapIndex", "J");
     env->SetLongField(obj, fieldId, (jlong)memoryType.heapIndex);
 
     std::vector<const char*> flagStrings = parseMemTypePropertyFlags(memoryType.propertyFlags);
-    jclass stringClass = env->FindClass("java/lang/String");
+    jclass stringClass = env->FindClass(JavaClasses::JavaStringClassName);
     jobjectArray javaOutStrings = env->NewObjectArray(flagStrings.size(), stringClass, NULL);
     for (size_t i = 0; i < flagStrings.size(); i++)
     {
         env->SetObjectArrayElement(javaOutStrings, i, env->NewStringUTF(flagStrings[i]));
     }
 
-    fieldId = env->GetFieldID(memTypeClass, "propertyFlags", "[Ljava/lang/String;");
+    std::string arraySig = "[" + std::string(JavaClasses::JavaStringClassSignature);
+    fieldId = env->GetFieldID(memTypeClass, "propertyFlags", arraySig.c_str());
     env->SetObjectField(obj, fieldId, javaOutStrings);
 }
 
@@ -813,20 +838,21 @@ void populateMemoryTypeObject(JNIEnv* env, const VkMemoryType memoryType, jobjec
  */
 void populateMemoryHeapObject(JNIEnv* env, const VkMemoryHeap memoryHeap, jobject obj)
 {
-    jclass memHeapClass = env->FindClass("com/example/vulkaninfoapp/MemoryHeap");
+    jclass memHeapClass = env->FindClass(JavaClasses::MemoryHeapClassName);
 
     jfieldID fieldId = env->GetFieldID(memHeapClass, "size", "J");
     env->SetLongField(obj, fieldId, (jlong)memoryHeap.size);
 
     std::vector<const char*> flagStrings = parseMemHeapFlags(memoryHeap.flags);
-    jclass stringClass = env->FindClass("java/lang/String");
+    jclass stringClass = env->FindClass(JavaClasses::JavaStringClassName);
     jobjectArray javaOutStrings = env->NewObjectArray(flagStrings.size(), stringClass, NULL);
     for (size_t i = 0; i < flagStrings.size(); i++)
     {
         env->SetObjectArrayElement(javaOutStrings, i, env->NewStringUTF(flagStrings[i]));
     }
 
-    fieldId = env->GetFieldID(memHeapClass, "heapFlags", "[Ljava/lang/String;");
+    std::string arraySig = "[" + std::string(JavaClasses::JavaStringClassSignature);
+    fieldId = env->GetFieldID(memHeapClass, "heapFlags", arraySig.c_str());
     env->SetObjectField(obj, fieldId, javaOutStrings);
 }
 
@@ -835,25 +861,6 @@ JNIEXPORT jobject JNICALL
 Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
                                                       jstring app_name, jstring engine_name)
 {
-    const std::string VkInfoClassName = "com/example/vulkaninfoapp/VkInfo";
-    const std::string InstanceInfoClassName = "com/example/vulkaninfoapp/InstanceInfo";
-    const std::string PhysicalDevicePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceProperties";
-    const std::string PhysicalDeviceLimitsClassName = "com/example/vulkaninfoapp/PhysicalDeviceLimits";
-    const std::string PhysicalDeviceSparsePropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceSparseProperties";
-    const std::string PhysicalDeviceFeaturesClassName = "com/example/vulkaninfoapp/PhysicalDeviceFeatures";
-    const std::string PhysicalDeviceMemoryPropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceMemoryProperties";
-    const std::string MemoryTypeClassName = "com/example/vulkaninfoapp/MemoryType";
-    const std::string MemoryHeapClassName = "com/example/vulkaninfoapp/MemoryHeap";
-
-    const std::string InstanceInfoClassSignature = "Lcom/example/vulkaninfoapp/InstanceInfo;";
-    const std::string PhysicalDevicePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceProperties;";
-    const std::string PhysicalDeviceLimitsClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceLimits;";
-    const std::string PhysicalDeviceSparsePropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceSparseProperties;";
-    const std::string PhysicalDeviceFeaturesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceFeatures;";
-    const std::string PhysicalDeviceMemoryPropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceMemoryProperties;";
-    const std::string MemoryTypeClassSignature = "Lcom/example/vulkaninfoapp/MemoryType;";
-    const std::string MemoryHeapClassSignature = "Lcom/example/vulkaninfoapp/MemoryHeap;";
-
     VkInfo vkInfo;
     vkInfo.instance = new Instance(env->GetStringUTFChars(app_name, nullptr), env->GetStringUTFChars(engine_name, nullptr), {}, {});
     if (vkInfo.instance->getHandle() == VK_NULL_HANDLE || vkInfo.instance->getNumberPhysicalDevices() == 0)
@@ -861,80 +868,81 @@ Java_com_example_vulkaninfoapp_MainActivity_getVkInfo(JNIEnv *env, jclass clazz,
         return nullptr;
     }
 
+#warning
     // For now this app is only designed to run on SoC devices which have only 1 GPU. So just choose the first one.
     vkInfo.selectedPhysicalDevice = vkInfo.instance->getPhysicalDevices()[0];
     vkInfo.physicalDeviceProperties = PhysicalDevice::getDeviceProperties(vkInfo.selectedPhysicalDevice);
 
-    jobject vkInfoObject = getObject(env, VkInfoClassName.c_str());
+    jobject vkInfoObject = getObject(env, JavaClasses::VkInfoClassName);
 
     // Populate the instanceInfo Java object.
-    jfieldID fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "instanceInfo", InstanceInfoClassSignature.c_str());
-    jobject instanceInfoObject = getObject(env, InstanceInfoClassName.c_str());
+    jfieldID fieldId = env->GetFieldID(env->FindClass(JavaClasses::VkInfoClassName), "instanceInfo", JavaClasses::InstanceInfoClassSignature);
+    jobject instanceInfoObject = getObject(env, JavaClasses::InstanceInfoClassName);
     populateInstanceInfoObject(env, vkInfo.instance, instanceInfoObject);
     env->SetObjectField(vkInfoObject, fieldId, instanceInfoObject);
 
     // Populate the physicalDeviceProperties Java object.
-    jobject physicalDevicePropertiesObject = getObject(env, PhysicalDevicePropertiesClassName.c_str());
+    jobject physicalDevicePropertiesObject = getObject(env, JavaClasses::PhysicalDevicePropertiesClassName);
 
     // Populate physicalDeviceProperties.limits Java object.
-    fieldId = env->GetFieldID(env->FindClass(PhysicalDevicePropertiesClassName.c_str()), "physicalDeviceLimits", PhysicalDeviceLimitsClassSignature.c_str());
-    jobject physicalDeviceLimitsObject = getObject(env, PhysicalDeviceLimitsClassName.c_str());
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::PhysicalDevicePropertiesClassName), "physicalDeviceLimits", JavaClasses::PhysicalDeviceLimitsClassSignature);
+    jobject physicalDeviceLimitsObject = getObject(env, JavaClasses::PhysicalDeviceLimitsClassName);
     populatePhysicalDeviceLimitsObject(env, vkInfo.physicalDeviceProperties.limits, physicalDeviceLimitsObject);
     env->SetObjectField(physicalDevicePropertiesObject, fieldId, physicalDeviceLimitsObject);
 
     // Populate physicalDeviceProperties.sparseProperties Java object.
-    fieldId = env->GetFieldID(env->FindClass(PhysicalDevicePropertiesClassName.c_str()), "physicalDeviceSparseProperties", PhysicalDeviceSparsePropertiesClassSignature.c_str());
-    jobject physicalDeviceSparsePropertiesObject = getObject(env, PhysicalDeviceSparsePropertiesClassName.c_str());
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::PhysicalDevicePropertiesClassName), "physicalDeviceSparseProperties", JavaClasses::PhysicalDeviceSparsePropertiesClassSignature);
+    jobject physicalDeviceSparsePropertiesObject = getObject(env, JavaClasses::PhysicalDeviceSparsePropertiesClassName);
     populatePhysicalDeviceSparsePropertiesObject(env, vkInfo.physicalDeviceProperties.sparseProperties, physicalDeviceSparsePropertiesObject);
     env->SetObjectField(physicalDevicePropertiesObject, fieldId, physicalDeviceSparsePropertiesObject);
 
     // Set the physicalDeviceProperties field of the Java VkInfo object.
     populatePhysicalDevicePropertiesObject(env, vkInfo.physicalDeviceProperties, physicalDevicePropertiesObject);
-    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceProperties", PhysicalDevicePropertiesClassSignature.c_str());
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::VkInfoClassName), "physicalDeviceProperties", JavaClasses::PhysicalDevicePropertiesClassSignature);
     env->SetObjectField(vkInfoObject, fieldId, physicalDevicePropertiesObject);
 
     // Populate the physicalDeviceFeatures field of the Java VkInfo object.
     vkInfo.physicalDeviceFeatures = PhysicalDevice::getDeviceFeatures(vkInfo.selectedPhysicalDevice);
-    jobject physicalDeviceFeaturesObject = getObject(env, PhysicalDeviceFeaturesClassName.c_str());
+    jobject physicalDeviceFeaturesObject = getObject(env, JavaClasses::PhysicalDeviceFeaturesClassName);
     populatePhysicalDeviceFeaturesObject(env, vkInfo.physicalDeviceFeatures, physicalDeviceFeaturesObject);
-    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceFeatures", PhysicalDeviceFeaturesClassSignature.c_str());
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::VkInfoClassName), "physicalDeviceFeatures", JavaClasses::PhysicalDeviceFeaturesClassSignature);
     env->SetObjectField(vkInfoObject, fieldId, physicalDeviceFeaturesObject);
 
     // Populate the physicalDeviceMemoryProperties field of the Java VkInfo object.
     vkInfo.physicalDeviceMemoryProperties = PhysicalDevice::getMemoryProperties(vkInfo.selectedPhysicalDevice);
-    jobject physicalDeviceMemoryPropertiesObject = getObject(env, PhysicalDeviceMemoryPropertiesClassName.c_str());
+    jobject physicalDeviceMemoryPropertiesObject = getObject(env, JavaClasses::PhysicalDeviceMemoryPropertiesClassName);
     populatePhysicalDeviceMemoryPropertiesObject(env, vkInfo.physicalDeviceMemoryProperties, physicalDeviceMemoryPropertiesObject);
 
     // Populate the MemoryType Java objects.
-    jclass memoryTypeClass = env->FindClass(MemoryTypeClassName.c_str());
+    jclass memoryTypeClass = env->FindClass(JavaClasses::MemoryTypeClassName);
     jobjectArray memoryTypeObjArray = env->NewObjectArray(vkInfo.physicalDeviceMemoryProperties.memoryTypeCount, memoryTypeClass, nullptr);
     for (size_t i = 0; i < vkInfo.physicalDeviceMemoryProperties.memoryTypeCount; i++)
     {
-        jobject memTypeObj = getObject(env, MemoryTypeClassName.c_str());
+        jobject memTypeObj = getObject(env, JavaClasses::MemoryTypeClassName);
         populateMemoryTypeObject(env, vkInfo.physicalDeviceMemoryProperties.memoryTypes[i], memTypeObj);
         env->SetObjectArrayElement(memoryTypeObjArray, i, memTypeObj);
     }
 
-    std::string arraySig = "[" + MemoryTypeClassSignature;
-    fieldId = env->GetFieldID(env->FindClass(PhysicalDeviceMemoryPropertiesClassName.c_str()), "memoryTypes", arraySig.c_str());
+    std::string arraySig = "[" + std::string(JavaClasses::MemoryTypeClassSignature);
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::PhysicalDeviceMemoryPropertiesClassName), "memoryTypes", arraySig.c_str());
     env->SetObjectField(physicalDeviceMemoryPropertiesObject, fieldId, memoryTypeObjArray);
 
     // Populate the MemoryHeap Java objects.
-    jclass memoryHeapClass = env->FindClass(MemoryHeapClassName.c_str());
+    jclass memoryHeapClass = env->FindClass(JavaClasses::MemoryHeapClassName);
     jobjectArray memoryHeapObjArray = env->NewObjectArray(vkInfo.physicalDeviceMemoryProperties.memoryHeapCount, memoryHeapClass, nullptr);
     for (size_t i = 0; i < vkInfo.physicalDeviceMemoryProperties.memoryHeapCount; i++)
     {
-        jobject memHeapObj = getObject(env, MemoryHeapClassName.c_str());
+        jobject memHeapObj = getObject(env, JavaClasses::MemoryHeapClassName);
         populateMemoryHeapObject(env, vkInfo.physicalDeviceMemoryProperties.memoryHeaps[i], memHeapObj);
         env->SetObjectArrayElement(memoryHeapObjArray, i, memHeapObj);
     }
 
     arraySig.clear();
-    arraySig = "[" + MemoryHeapClassSignature;
-    fieldId = env->GetFieldID(env->FindClass(PhysicalDeviceMemoryPropertiesClassName.c_str()), "memoryHeaps", arraySig.c_str());
+    arraySig = "[" + std::string(JavaClasses::MemoryHeapClassSignature);
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::PhysicalDeviceMemoryPropertiesClassName), "memoryHeaps", arraySig.c_str());
     env->SetObjectField(physicalDeviceMemoryPropertiesObject, fieldId, memoryHeapObjArray);
 
-    fieldId = env->GetFieldID(env->FindClass(VkInfoClassName.c_str()), "physicalDeviceMemoryProperties", PhysicalDeviceMemoryPropertiesClassSignature.c_str());
+    fieldId = env->GetFieldID(env->FindClass(JavaClasses::VkInfoClassName), "physicalDeviceMemoryProperties", JavaClasses::PhysicalDeviceMemoryPropertiesClassSignature);
     env->SetObjectField(vkInfoObject, fieldId, physicalDeviceMemoryPropertiesObject);
 
     delete vkInfo.instance;

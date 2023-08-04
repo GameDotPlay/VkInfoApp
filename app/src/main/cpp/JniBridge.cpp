@@ -17,6 +17,7 @@ namespace JavaClasses
     const char* const PhysicalDeviceMemoryPropertiesClassName = "com/example/vulkaninfoapp/PhysicalDeviceMemoryProperties";
     const char* const MemoryTypeClassName = "com/example/vulkaninfoapp/MemoryType";
     const char* const MemoryHeapClassName = "com/example/vulkaninfoapp/MemoryHeap";
+    const char* const ExtensionPropertiesClassName = "com/example/vulkaninfoapp/ExtensionProperties";
 
     const char* const JavaStringClassSignature = "Ljava/lang/String;";
     const char* const InstanceInfoClassSignature = "Lcom/example/vulkaninfoapp/InstanceInfo;";
@@ -27,6 +28,7 @@ namespace JavaClasses
     const char* const PhysicalDeviceMemoryPropertiesClassSignature = "Lcom/example/vulkaninfoapp/PhysicalDeviceMemoryProperties;";
     const char* const MemoryTypeClassSignature = "Lcom/example/vulkaninfoapp/MemoryType;";
     const char* const MemoryHeapClassSignature = "Lcom/example/vulkaninfoapp/MemoryHeap;";
+    const char* const ExtensionPropertiesClassSignature = "Lcom/example/vulkaninfoapp/ExtensionProperties;";
 }
 
 /**
@@ -192,16 +194,41 @@ void populateInstanceInfoObject(JNIEnv *env, const Instance* instance, jobject i
 {
     jclass instanceInfoClass = env->FindClass(JavaClasses::InstanceInfoClassName);
 
-    jfieldID fidNumber = env->GetFieldID(instanceInfoClass, "appName", JavaClasses::JavaStringClassSignature);
+    jfieldID fieldId = env->GetFieldID(instanceInfoClass, "appName", JavaClasses::JavaStringClassSignature);
     jstring appName = env->NewStringUTF(instance->getAppName().c_str());
-    env->SetObjectField(instanceInfoObject, fidNumber, appName);
+    env->SetObjectField(instanceInfoObject, fieldId, appName);
 
-    fidNumber = env->GetFieldID(instanceInfoClass, "engineName", JavaClasses::JavaStringClassSignature);
+    fieldId = env->GetFieldID(instanceInfoClass, "engineName", JavaClasses::JavaStringClassSignature);
     jstring engineNameFromInstance = env->NewStringUTF(instance->getEngineName().c_str());
-    env->SetObjectField(instanceInfoObject, fidNumber, engineNameFromInstance);
+    env->SetObjectField(instanceInfoObject, fieldId, engineNameFromInstance);
 
-    fidNumber = env->GetFieldID(instanceInfoClass, "numDevices", "I");
-    env->SetIntField(instanceInfoObject, fidNumber, (int)instance->getNumberPhysicalDevices());
+    uint32_t numExtensions = instance->getNumberInstanceExtensions();
+    fieldId = env->GetFieldID(instanceInfoClass, "numExtensions", "J");
+    env->SetLongField(instanceInfoObject, fieldId, (jlong)numExtensions);
+
+    jclass extensionPropertyClass = env->FindClass(JavaClasses::ExtensionPropertiesClassName);
+    jobjectArray extensionObjArray = env->NewObjectArray(numExtensions, extensionPropertyClass, nullptr);
+    std::vector<VkExtensionProperties> properties = instance->getAllExtensionProperties();
+    for (size_t i = 0; i < properties.size(); i++)
+    {
+        jobject extensionObj = getObject(env, JavaClasses::ExtensionPropertiesClassName);
+
+        fieldId = env->GetFieldID(extensionPropertyClass, "name", JavaClasses::JavaStringClassSignature);
+        jstring outJString = env->NewStringUTF(properties[i].extensionName);
+        env->SetObjectField(extensionObj, fieldId, outJString);
+
+        fieldId = env->GetFieldID(extensionPropertyClass, "specVersion", "J");
+        env->SetLongField(extensionObj, fieldId, (jlong)properties[i].specVersion);
+
+        env->SetObjectArrayElement(extensionObjArray, i, extensionObj);
+    }
+
+    std::string arraySig = "[" + std::string(JavaClasses::ExtensionPropertiesClassSignature);
+    fieldId = env->GetFieldID(instanceInfoClass, "availableExtensions", arraySig.c_str());
+    env->SetObjectField(instanceInfoObject, fieldId, extensionObjArray);
+
+    fieldId = env->GetFieldID(instanceInfoClass, "numDevices", "J");
+    env->SetLongField(instanceInfoObject, fieldId, (jlong)instance->getNumberPhysicalDevices());
 }
 
 /**

@@ -149,3 +149,37 @@ std::vector<VkPhysicalDevice> Instance::getPhysicalDevices() const
 
     return devices;
 }
+
+uint32_t Instance::getNumberInstanceExtensions() const
+{
+    uint32_t numExtensions = 0;
+    if (vkEnumerateInstanceExtensionProperties(nullptr, &numExtensions, nullptr) != VK_SUCCESS)
+    {
+        return 0;
+    }
+
+    return numExtensions;
+}
+
+std::vector<VkExtensionProperties> Instance::getAllExtensionProperties() const
+{
+    uint32_t numExtensions = 0;
+    std::vector<VkExtensionProperties> extensionProperties;
+    extensionProperties.clear();
+
+    vkEnumerateInstanceExtensionProperties(nullptr, &numExtensions, nullptr);
+
+    extensionProperties.resize(numExtensions);
+    vkEnumerateInstanceExtensionProperties(nullptr, &numExtensions, extensionProperties.data());
+
+    return extensionProperties;
+}
+
+VkExtensionProperties Instance::getExtensionProperties(const char *layerName) const
+{
+    uint32_t numExtensions = 1;
+    VkExtensionProperties extensionProperties = {};
+    vkEnumerateInstanceExtensionProperties(layerName, &numExtensions, &extensionProperties);
+
+    return extensionProperties;
+}

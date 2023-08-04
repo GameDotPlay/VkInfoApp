@@ -22,6 +22,9 @@ public:
     std::string getEngineName() const;
     uint32_t getNumberPhysicalDevices() const;
     std::vector<VkPhysicalDevice> getPhysicalDevices() const;
+    uint32_t getNumberInstanceExtensions() const;
+    std::vector<VkExtensionProperties> getAllExtensionProperties() const;
+    VkExtensionProperties getExtensionProperties(const char* layerName) const;
 
 private:
     VkInstance handle = VK_NULL_HANDLE;

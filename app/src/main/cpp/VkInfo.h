@@ -1,6 +1,5 @@
 #pragma once
 
-#include "InstanceInfo.hpp"
 #include <vulkan/vulkan_core.h>
 
 struct VkInfo

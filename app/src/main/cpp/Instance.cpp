@@ -13,6 +13,10 @@ Instance::Instance()
     this->handle = VK_NULL_HANDLE;
 }
 
+/**
+ * Copy constructor.
+ * @param other The other <code>Instance</code>.
+ */
 Instance::Instance(const Instance& other)
 {
     this->appName = other.appName;
@@ -150,7 +154,10 @@ std::vector<VkPhysicalDevice> Instance::getPhysicalDevices() const
     return devices;
 }
 
-uint32_t Instance::getNumberInstanceExtensions() const
+/**
+ * Get the number of available extensions.
+ */
+uint32_t Instance::getNumAvailableExtensions() const
 {
     uint32_t numExtensions = 0;
     if (vkEnumerateInstanceExtensionProperties(nullptr, &numExtensions, nullptr) != VK_SUCCESS)
@@ -161,11 +168,13 @@ uint32_t Instance::getNumberInstanceExtensions() const
     return numExtensions;
 }
 
-std::vector<VkExtensionProperties> Instance::getAllExtensionProperties() const
+/**
+ * Get a list of all available extensions.
+ */
+std::vector<VkExtensionProperties> Instance::getAllAvailableExtensions() const
 {
     uint32_t numExtensions = 0;
-    std::vector<VkExtensionProperties> extensionProperties;
-    extensionProperties.clear();
+    std::vector<VkExtensionProperties> extensionProperties = {};
 
     vkEnumerateInstanceExtensionProperties(nullptr, &numExtensions, nullptr);
 
@@ -175,11 +184,45 @@ std::vector<VkExtensionProperties> Instance::getAllExtensionProperties() const
     return extensionProperties;
 }
 
-VkExtensionProperties Instance::getExtensionProperties(const char *layerName) const
+/**
+ * Get the properties of the given extension.
+ * @param extensionName The name of the extension to get properties of.
+ */
+VkExtensionProperties Instance::getExtensionProperties(const char *extensionName) const
 {
     uint32_t numExtensions = 1;
     VkExtensionProperties extensionProperties = {};
-    vkEnumerateInstanceExtensionProperties(layerName, &numExtensions, &extensionProperties);
+    vkEnumerateInstanceExtensionProperties(extensionName, &numExtensions, &extensionProperties);
 
     return extensionProperties;
+}
+
+/**
+ * Get the number of available layers.
+ */
+uint32_t Instance::getNumAvailableLayers() const
+{
+    uint32_t numLayers = 0;
+    if (vkEnumerateInstanceLayerProperties(&numLayers, nullptr) != VK_SUCCESS)
+    {
+        return 0;
+    }
+
+    return numLayers;
+}
+
+/**
+ * Get a list of all available layers.
+ */
+std::vector<VkLayerProperties> Instance::getAllAvailableLayers() const
+{
+    uint32_t numLayers = 0;
+    std::vector<VkLayerProperties> layerProperties = {};
+
+    vkEnumerateInstanceLayerProperties(&numLayers, nullptr);
+
+    layerProperties.resize(numLayers);
+    vkEnumerateInstanceLayerProperties(&numLayers, layerProperties.data());
+
+    return layerProperties;
 }

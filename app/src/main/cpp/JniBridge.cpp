@@ -202,13 +202,13 @@ void populateInstanceInfoObject(JNIEnv *env, const Instance* instance, jobject i
     jstring engineNameFromInstance = env->NewStringUTF(instance->getEngineName().c_str());
     env->SetObjectField(instanceInfoObject, fieldId, engineNameFromInstance);
 
-    uint32_t numExtensions = instance->getNumberInstanceExtensions();
+    uint32_t numExtensions = instance->getNumAvailableExtensions();
     fieldId = env->GetFieldID(instanceInfoClass, "numExtensions", "J");
     env->SetLongField(instanceInfoObject, fieldId, (jlong)numExtensions);
 
     jclass extensionPropertyClass = env->FindClass(JavaClasses::ExtensionPropertiesClassName);
     jobjectArray extensionObjArray = env->NewObjectArray(numExtensions, extensionPropertyClass, nullptr);
-    std::vector<VkExtensionProperties> properties = instance->getAllExtensionProperties();
+    std::vector<VkExtensionProperties> properties = instance->getAllAvailableExtensions();
     for (size_t i = 0; i < properties.size(); i++)
     {
         jobject extensionObj = getObject(env, JavaClasses::ExtensionPropertiesClassName);
